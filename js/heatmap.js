@@ -1,4 +1,3 @@
-//import * as d3Colorbar from "https://cdn.skypack.dev/d3-colorbar@0.0.1";
 const width = 1200;
 const height = 600;
 const padding = 50;
@@ -10,28 +9,25 @@ var timeFormatYear = d3.timeFormat("%Y");
 var timeFormatMonth = d3.timeFormat("%B");
 
 // define tooltip
-var tooltip = d3.select("#tooltip").
-append("div").
-attr("id", "tooltip").
-style("visibility", "hidden").
-style("background-color", "lightsteelblue").
-style("padding", "10px");
+var tooltip = d3.select("#tooltip")
+  .style("position", "absolute")
+  .style("visibility", "hidden")
+  .style("background-color", "lightsteelblue")
+  .style("padding", "10px");
 
 // description
-var descript = d3.select(".header").
-append("description");
+var descript = d3.select("#description");
 
 // legend
-var legend = d3.select(".header").
-append("legend").
+var legend = d3.select("#legend").
 attr("height", 0).
 attr("margin-bottom", 0);
 
 // First we need the data that has to be plotted
 
-d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json")
+//d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json")
 // use local storage for development
-//d3.json("./temperature.json")
+d3.json("../data/temperature.json")
 
 // then we can extract the data, process it and finally plot it
 .then(data => {
@@ -46,8 +42,8 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
   var zMax = d3.max(zData);
 
   // we have to scale the data
-  var xScale = d3.scaleBand().
-  domain(xData).
+  const years = [...new Set(xData)];
+  xScale.domain(years).
   range([2 * padding, width - 0.5 * padding]);
   var yScale = d3.scaleBand().
   domain(yData).
