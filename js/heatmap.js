@@ -107,6 +107,13 @@ d3.json("../data/temperature.json")
   attr("data-month", (d, i) => {return yData[i] - 1;}).
   attr("data-temp", (d, i) => {return zData[i];})
   // append tooltip
+  .on("mouseover", function () {
+    tooltip
+      .style("visibility", "visible")
+      .style("left", "50px")
+      .style("top", "50px")
+      .html("TEST TOOLTIP");
+  })
   .on("mouseover", function (event, d) {
     const index = this.getAttribute("index");
 
