@@ -29,9 +29,9 @@ attr("margin-bottom", 0);
 
 // First we need the data that has to be plotted
 
-//d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json")
+d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json")
 // use local storage for development
-d3.json("./temperature.json")
+//d3.json("./temperature.json")
 
 // then we can extract the data, process it and finally plot it
 .then(data => {
