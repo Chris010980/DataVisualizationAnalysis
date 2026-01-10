@@ -1,4 +1,4 @@
-import * as d3Colorbar from "https://cdn.skypack.dev/d3-colorbar@0.0.1";
+//import * as d3Colorbar from "https://cdn.skypack.dev/d3-colorbar@0.0.1";
 const width = 1200;
 const height = 600;
 const padding = 50;
