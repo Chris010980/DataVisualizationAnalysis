@@ -43,7 +43,7 @@ d3.json("../data/temperature.json")
 
   // we have to scale the data
   const years = [...new Set(xData)];
-  xScale.domain(years).
+  xScale = d3.scaleBand().domain(years).
   range([2 * padding, width - 0.5 * padding]);
   var yScale = d3.scaleBand().
   domain(yData).
