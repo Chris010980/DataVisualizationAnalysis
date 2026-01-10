@@ -10,7 +10,7 @@ var timeFormatYear = d3.timeFormat("%Y");
 var timeFormatMonth = d3.timeFormat("%B");
 
 // define tooltip
-var tooltip = d3.select(".plotarea").
+var tooltip = d3.select("#tooltip").
 append("div").
 attr("id", "tooltip").
 style("visibility", "hidden").
@@ -63,7 +63,7 @@ d3.json("./temperature.json")
   range([0, 500]);
 
   // append svg to div with class plotarea
-  var svg = d3.select(".plotarea").
+  var svg = d3.select("#heatmap").
   append("svg").
   attr("width", width).
   attr("height", height);
