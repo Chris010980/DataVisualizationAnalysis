@@ -1,29 +1,140 @@
-<h1>Data Visualization & Analysis</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Visualization & Analysis | Christian Lurz</title>
 
-<p>
-I create interactive data visualizations using D3.js
-with a strong focus on data analysis and scientific clarity.
-</p>
+  <meta name="description" content="Interactive data visualizations and data analysis using D3.js with a scientific and analytical focus." />
 
-<h2>Selected Projects</h2>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
 
-<ul>
-  <li>
-    <a href="projects/heatmap.html">Climate Change Heatmap</a>
-  </li>
-  <li>
-    <a href="projects/choropleth.html">Education by County (USA)</a>
-  </li>
-  <li>
-    <a href="projects/scatter.html">Tour de France & Doping</a>
-  </li>
-  <li>
-    <a href="projects/bar.html">Interactive Bar Chart</a>
-  </li>
-</ul>
+<body>
 
-<h2>About</h2>
-<p>
-Background in scientific computing and data analysis.
-Available for freelance data visualization projects.
-</p>
+  <header>
+    <h1>Data Visualization & Analysis</h1>
+    <p>
+      I design interactive data visualizations and perform data-driven analyses
+      with a strong focus on clarity, correctness, and scientific reasoning.
+    </p>
+  </header>
+
+  <main>
+
+    <section>
+      <h2>Selected Projects</h2>
+
+      <ul>
+        <li>
+          <a href="projects/heatmap.html">
+            Climate Change Heatmap
+          </a>
+          <br />
+          <small>
+            Monthly global temperature anomalies since 1880 visualized as an interactive heatmap.
+          </small>
+        </li>
+
+        <li>
+          <a href="projects/choropleth.html">
+            Education Level by County (USA)
+          </a>
+          <br />
+          <small>
+            Choropleth map showing the share of population holding a bachelor's degree.
+          </small>
+        </li>
+
+        <li>
+          <a href="projects/scatter.html">
+            Tour de France Performance & Doping Allegations
+          </a>
+          <br />
+          <small>
+            Scatterplot analysis comparing stage times and later doping allegations.
+          </small>
+        </li>
+
+        <li>
+          <a href="projects/bar.html">
+            Interactive Bar Chart
+          </a>
+          <br />
+          <small>
+            Example of a reusable and well-structured D3 bar chart.
+          </small>
+        </li>
+
+        <li>
+          <a href="projects/treemap.html">
+            Movie Genres & Viewership
+          </a>
+          <br />
+          <small>
+            Treemap visualization of movie genres based on visitor numbers.
+          </small>
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>About Me</h2>
+      <p>
+        I have a strong background in scientific computing, data analysis, and
+        quantitative problem solving. My work emphasizes transparent data
+        processing, reproducible results, and visualizations that support
+        insight rather than decoration.
+      </p>
+
+      <p>
+        I am available for small to medium-sized projects involving data
+        visualization, exploratory data analysis, and the preparation of
+        figures for reports, publications, or web applications.
+      </p>
+    </section>
+
+    <section>
+      <h2>Tools & Focus</h2>
+      <ul>
+        <li>D3.js (interactive visualizations)</li>
+        <li>JavaScript / HTML / CSS</li>
+        <li>Data analysis & transformation</li>
+        <li>Scientific and technical visualizations</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Contact</h2>
+      <p>
+        If you are interested in collaborating or have a concrete project in
+        mind, feel free to get in touch:
+      </p>
+
+      <p>
+        <strong>Email:</strong>
+        <a href="mailto:your.email@example.com">your.email@example.com</a>
+      </p>
+
+      <p>
+        <strong>GitHub:</strong>
+        <a href="https://github.com/yourusername" target="_blank">
+          github.com/yourusername
+        </a>
+      </p>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>
+      © <span id="year"></span> Christian Lurz
+    </p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
