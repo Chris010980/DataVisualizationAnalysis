@@ -107,17 +107,25 @@ d3.json("../data/temperature.json")
   attr("data-month", (d, i) => {return yData[i] - 1;}).
   attr("data-temp", (d, i) => {return zData[i];})
   // append tooltip
-  .on("mouseover", function (e, d) {
-    var index = this.getAttribute('index');
-    tooltip.html("Year: " + xData[index] +
-    "<br/>Month: " + timeFormatMonth(timeParseMonth(yData[index])) +
-    "<br/>Deviation: " + zData[index].toFixed(1)).
-    style("visibility", "visible").
-    attr('data-year', xData[index]).
-    style("left", xScale(xData[index]) + 30 + "px").
-    style("top", yScale(yData[index]) + 15 + "px");
-  }).
-  on("mouseout", () => {tooltip.style("visibility", "hidden");});
+  .on("mouseover", function (event, d) {
+    const index = this.getAttribute("index");
+
+    tooltip
+      .style("visibility", "visible")
+      .html(
+        "Year: " + xData[index] +
+        "<br/>Month: " + timeFormatMonth(timeParseMonth(yData[index])) +
+        "<br/>Deviation: " + zData[index].toFixed(1) + " °C"
+      );
+  })
+  .on("mousemove", function (event) {
+    tooltip
+      .style("left", (event.pageX + 15) + "px")
+      .style("top", (event.pageY - 28) + "px");
+  })
+  .on("mouseout", function () {
+    tooltip.style("visibility", "hidden");
+  });
 
   // append x-label
   svg.append('text').

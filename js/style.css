@@ -27,15 +27,13 @@ body {
 }
 #xlabel {
   font-size: 20px;
-  font-weight: bold;  
+  font-weight: bold;
 }
 #tooltip {
-  border: 2px solid black;
-  display: flex;
   position: absolute;
-  box-shadow: 1px 1px 10px;
-  border-radius: 2px;
-  font-weight: bold;
+  pointer-events: none;
+  z-index: 10;
+  visibility: hidden;
 }
 #legend {
   margin: auto;
