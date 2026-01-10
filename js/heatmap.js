@@ -114,8 +114,8 @@ d3.json("../data/temperature.json")
     "<br/>Deviation: " + zData[index].toFixed(1)).
     style("visibility", "visible").
     attr('data-year', xData[index]).
-    style("left", xScale(xData[index]) + 300 + "px").
-    style("top", yScale(yData[index]) + 150 + "px");
+    style("left", xScale(xData[index]) + 30 + "px").
+    style("top", yScale(yData[index]) + 15 + "px");
   }).
   on("mouseout", () => {tooltip.style("visibility", "hidden");});
 
