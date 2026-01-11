@@ -1,172 +1,160 @@
 const width = 1200;
 const height = 600;
-const padding = 50;
+const margin = { top: 40, right: 30, bottom: 80, left: 80 };
 
-// Time-Formatter and -Parser
-var timeParseYear = d3.timeParse("%Y");
-var timeParseMonth = d3.timeParse("%m");
-var timeFormatYear = d3.timeFormat("%Y");
-var timeFormatMonth = d3.timeFormat("%B");
+// Time helpers
+const parseYear = d3.timeParse("%Y");
+const parseMonth = d3.timeParse("%m");
+const formatYear = d3.timeFormat("%Y");
+const formatMonth = d3.timeFormat("%B");
 
-// define tooltip
-var tooltip = d3.select("#tooltip")
-  .style("position", "absolute")
-  .style("visibility", "hidden")
-  .style("background-color", "lightsteelblue")
-  .style("padding", "10px");
+// Tooltip
+const tooltip = d3.select("#tooltip");
 
-// description
-var descript = d3.select("#description");
+// Description & legend containers
+const description = d3.select("#description");
+const legendContainer = d3.select("#legend");
 
-// legend
-var legend = d3.select("#legend").
-attr("height", 0).
-attr("margin-bottom", 0);
+// Load data
+d3.json("../data/temperature.json").then(data => {
+  const baseTemp = data.baseTemperature;
+  const values = data.monthlyVariance;
 
-// First we need the data that has to be plotted
+  const years = [...new Set(values.map(d => d.year))];
+  const months = d3.range(1, 13);
 
-//d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json")
-// use local storage for development
-d3.json("../data/temperature.json")
+  const zMin = d3.min(values, d => d.variance);
+  const zMax = d3.max(values, d => d.variance);
 
-// then we can extract the data, process it and finally plot it
-.then(data => {
-  var baseTemp = data.baseTemperature;
-  var dataArr = data.monthlyVariance;
-  var xData = dataArr.map(x => x.year);
-  var yData = dataArr.map(y => y.month);
-  var zData = dataArr.map(z => z.variance);
+  // Scales
+  const xScale = d3.scaleBand()
+    .domain(years)
+    .range([margin.left, width - margin.right])
+    .padding(0);
 
-  // next we determine the min and max for z-range
-  var zMin = d3.min(zData);
-  var zMax = d3.max(zData);
+  const yScale = d3.scaleBand()
+    .domain(months)
+    .range([margin.top, height - margin.bottom])
+    .padding(0);
 
-  // we have to scale the data
-  const years = [...new Set(xData)];
-  var xScale = d3.scaleBand().domain(years).
-  range([2 * padding, width - 0.5 * padding]);
-  var yScale = d3.scaleBand().
-  domain(yData).
-  range([0, height - padding]);
-  var myColor = d3.scaleSequential().
-  interpolator(d3.interpolateRdYlBu).
-  domain([zMax, zMin]);
-  var colorScale = d3.scaleLinear().
-  domain([zMin, (zMin + zMax) / 2, zMax]).
-  range(['#4575b4', '#ffffbf', '#d73027']);
-  var zScale = d3.scaleLinear().
-  domain([zMin, zMax]).
-  range([0, 500]);
+  const colorScale = d3.scaleSequential()
+    .interpolator(d3.interpolateRdYlBu)
+    .domain([zMax, zMin]);
 
-  // append svg to div with class plotarea
-  var svg = d3.select("#heatmap").
-  append("svg").
-  attr("width", width).
-  attr("height", height);
+  // SVG
+  const svg = d3.select("#heatmap")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height);
 
-  // append description
-  descript.append("h3").
-  attr("id", "description").
-  html("Period: " + xData[0] + " - " + xData[xData.length - 1] +
-  "<br/>Base Temperature: " + baseTemp + "°C");
-  // append legend
-  legend.append("text").
-  attr("id", "legend-text").
-  text("Temperature Deviation: " + zMin.toFixed(1) + "°C");
+  // Description
+  description.html(`
+    <h3>Global Temperature Variance</h3>
+    <p>
+      Period: ${years[0]} – ${years[years.length - 1]}<br>
+      Base temperature: ${baseTemp} °C
+    </p>
+  `);
 
-  legend.append("svg").
-  attr("height", 50).
-  attr("id", "legend").
-  selectAll("rect").
-  data(zData).
-  enter().
-  append("rect").
-  attr("x", (d, i) => {var val = zMin + i / zData.length * (zMax - zMin);return zScale(val);}).
-  attr("y", 20).
-  attr("height", 30).
-  attr("width", 2).
-  attr("fill", (d, i) => {var val = zMin + i / zData.length * (zMax - zMin);return colorScale(val);});
+  // Heatmap cells
+  svg.selectAll(".cell")
+    .data(values)
+    .enter()
+    .append("rect")
+    .attr("class", "cell")
+    .attr("x", d => xScale(d.year))
+    .attr("y", d => yScale(d.month))
+    .attr("width", xScale.bandwidth())
+    .attr("height", yScale.bandwidth())
+    .attr("fill", d => colorScale(d.variance))
+    .attr("data-year", d => d.year)
+    .attr("data-month", d => d.month - 1)
+    .attr("data-temp", d => d.variance)
+    .on("mouseover", (event, d) => {
+      tooltip
+        .style("visibility", "visible")
+        .html(`
+          <strong>${formatMonth(parseMonth(d.month))} ${d.year}</strong><br>
+          Deviation: ${d.variance.toFixed(2)} °C
+        `);
+    })
+    .on("mousemove", event => {
+      tooltip
+        .style("left", `${event.pageX + 15}px`)
+        .style("top", `${event.pageY - 30}px`);
+    })
+    .on("mouseout", () => {
+      tooltip.style("visibility", "hidden");
+    });
 
-  legend.append("text").
-  attr("id", "legend-text").
-  text(zMax.toFixed(1) + "°C");
+  // X axis
+  const xAxis = d3.axisBottom(xScale)
+    .tickValues(years.filter(y => y % 20 === 0))
+    .tickFormat(d => formatYear(parseYear(d)));
 
-  // append rect to svg
-  svg.selectAll("rect").
-  data(dataArr).
-  enter().
-  append("rect").
-  attr('class', 'cell').
-  attr('index', (d, i) => i).
-  attr("x", (d, i) => {return xScale(xData[i]);}).
-  attr("y", (d, i) => {return yScale(yData[i]);}).
-  attr("width", xScale.bandwidth()).
-  attr("height", yScale.bandwidth()).
-  attr("fill", (d, i) => {return myColor(zData[i]);}).
-  attr("data-year", (d, i) => {return xData[i];}).
-  attr("data-month", (d, i) => {return yData[i] - 1;}).
-  attr("data-temp", (d, i) => {return zData[i];})
-  // append tooltip
-  .on("mouseover", function () {
-    tooltip
-      .style("visibility", "visible")
-      .style("left", "50px")
-      .style("top", "50px")
-      .html("TEST TOOLTIP");
-  })
-  .on("mouseover", function (event, d) {
-    const index = this.getAttribute("index");
+  svg.append("g")
+    .attr("id", "x-axis")
+    .attr("class", "axis")
+    .attr("transform", `translate(0,${height - margin.bottom})`)
+    .call(xAxis);
 
-    tooltip
-      .style("visibility", "visible")
-      .html(
-        "Year: " + xData[index] +
-        "<br/>Month: " + timeFormatMonth(timeParseMonth(yData[index])) +
-        "<br/>Deviation: " + zData[index].toFixed(1) + " °C"
-      );
-  })
-  .on("mousemove", function (event) {
-    tooltip
-      .style("left", (event.pageX + 15) + "px")
-      .style("top", (event.pageY - 28) + "px");
-  })
-  .on("mouseout", function () {
-    tooltip.style("visibility", "hidden");
+  svg.append("text")
+    .attr("class", "axis-label")
+    .attr("x", width / 2)
+    .attr("y", height - 20)
+    .attr("text-anchor", "middle")
+    .text("Year");
+
+  // Y axis
+  const yAxis = d3.axisLeft(yScale)
+    .tickFormat(d => formatMonth(parseMonth(d)));
+
+  svg.append("g")
+    .attr("id", "y-axis")
+    .attr("class", "axis")
+    .attr("transform", `translate(${margin.left},0)`)
+    .call(yAxis);
+
+  // -------- Legend --------
+  const legendWidth = 300;
+  const legendHeight = 12;
+
+  const legendScale = d3.scaleLinear()
+    .domain([zMin, zMax])
+    .range([0, legendWidth]);
+
+  const legendSvg = legendContainer
+    .append("svg")
+    .attr("width", legendWidth + 60)
+    .attr("height", 50);
+
+  const legendGradient = legendSvg
+    .append("defs")
+    .append("linearGradient")
+    .attr("id", "legend-gradient");
+
+  d3.range(0, 1.01, 0.01).forEach(t => {
+    legendGradient.append("stop")
+      .attr("offset", `${t * 100}%`)
+      .attr("stop-color", colorScale(zMin + t * (zMax - zMin)));
   });
 
-  // append x-label
-  svg.append('text').
-  attr("id", "xlabel").
-  attr('x', 600).
-  attr('y', 600).
-  text('Year');
+  legendSvg.append("rect")
+    .attr("x", 30)
+    .attr("y", 10)
+    .attr("width", legendWidth)
+    .attr("height", legendHeight)
+    .style("fill", "url(#legend-gradient)");
 
-  // define x- and y-axis and append it to svg
-  var xAxis = d3.axisBottom().
-  scale(xScale).
-  tickValues(xScale.domain().filter(year => {
-    // set ticks to years divisible by 10
-    return year % 20 === 0;
-  })).
+  legendSvg.append("g")
+    .attr("transform", `translate(30,${10 + legendHeight})`)
+    .call(d3.axisBottom(legendScale).ticks(6))
+    .attr("class", "legend-axis");
 
-  tickFormat(year => {return timeFormatYear(timeParseYear(year));}).
-  tickSize(10, 1);
-
-  svg.append("g").
-  attr("transform", "translate(0," + (height - padding) + ")").
-  attr("class", "axis").
-  attr("id", "x-axis").
-  call(xAxis);
-
-  var yAxis = d3.axisLeft().
-  scale(yScale).
-  tickValues(yScale.domain()).
-  tickFormat(month => {return timeFormatMonth(timeParseMonth(month));}).
-  tickSize(10, 1);
-  svg.append("g").
-  attr("transform", "translate(" + 2 * padding + ",0)").
-  attr("id", "y-axis").
-  attr("class", "axis").
-  call(yAxis);
-
+  legendSvg.append("text")
+    .attr("x", (legendWidth + 60) / 2)
+    .attr("y", 45)
+    .attr("text-anchor", "middle")
+    .attr("class", "legend-label")
+    .text("Temperature deviation (°C)");
 });
