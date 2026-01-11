@@ -156,7 +156,7 @@ d3.json("../data/temperature.json").then(data => {
     // Label with generous spacing
     legendSvg.append("text")
       .attr("x", (legendWidth + 80) / 2)
-      .attr("y", 10)
+      .attr("y", 70)
       .attr("text-anchor", "middle")
       .attr("class", "legend-label")
       .text("Temperature deviation (°C)");
