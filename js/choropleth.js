@@ -130,7 +130,7 @@ Promise.all([
 
   legendSvg.append("g")
     .attr("transform", `translate(80,${16 + legendHeight + 8})`)
-    .attr("class", "legend-axis")
+    .attr("class", "legend-axis2")
     .call(
       d3.axisBottom(legendScale)
         .ticks(5)
@@ -141,13 +141,13 @@ Promise.all([
     .attr("x", (legendWidth + 160) / 2)
     .attr("y", 72)
     .attr("text-anchor", "middle")
-    .attr("class", "legend-label")
+    .attr("class", "legend-label2")
     .text("Population with bachelor's degree (%)");
 
   legendSvg.append("text")
     .attr("x", (legendWidth + 160) / 2)
     .attr("y", 92)
     .attr("text-anchor", "middle")
-    .attr("class", "legend-caption")
+    .attr("class", "legend-caption2")
     .text("County-level data; darker green indicates higher values.");
 });
