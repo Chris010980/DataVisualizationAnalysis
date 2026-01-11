@@ -160,4 +160,4 @@ d3.json("../data/temperature.json").then(data => {
       .attr("text-anchor", "middle")
       .attr("class", "legend-label")
       .text("Temperature deviation (°C)");
-  }
+});
