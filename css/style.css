@@ -58,11 +58,19 @@ h1, h2, h3 {
   font-size: 13px;
 }
 
+.legend-axis text {
+  font-size: 11px;
+}
+
 .legend-label {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
 }
 
+.legend-caption {
+  font-size: 11px;
+  fill: #555;
+}
 .figure {
   margin: 40px auto;
 }

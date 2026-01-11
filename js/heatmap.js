@@ -1,5 +1,8 @@
-const width = 1200;
-const height = 600;
+const container = document.querySelector("#heatmap");
+const containerWidth = container.clientWidth;
+
+const width = containerWidth;
+const height = Math.round(containerWidth * 0.5);
 const margin = { top: 40, right: 30, bottom: 80, left: 80 };
 
 // Time helpers
@@ -44,8 +47,10 @@ d3.json("../data/temperature.json").then(data => {
   // SVG
   const svg = d3.select("#heatmap")
     .append("svg")
-    .attr("width", width)
-    .attr("height", height);
+    .attr("viewBox", `0 0 ${width} ${height}`)
+    .attr("preserveAspectRatio", "xMidYMid meet")
+    .style("width", "100%")
+    .style("height", "auto");
 
   // Description
   description.html(`
@@ -116,17 +121,18 @@ d3.json("../data/temperature.json").then(data => {
     .call(yAxis);
 
     // -------- Legend --------
-    const legendWidth = 360;
+    const legendWidth = Math.min(360, width * 0.6);
     const legendHeight = 18;
 
     const legendScale = d3.scaleLinear()
       .domain([zMin, zMax])
       .range([0, legendWidth]);
 
-    const legendSvg = legendContainer
-      .append("svg")
-      .attr("width", legendWidth + 360)
-      .attr("height", 140);
+      const legendSvg = legendContainer
+        .append("svg")
+        .attr("viewBox", `0 0 ${legendWidth + 360} 140`)
+        .style("width", "100%")
+        .style("height", "auto");
 
     const legendGradient = legendSvg
       .append("defs")
