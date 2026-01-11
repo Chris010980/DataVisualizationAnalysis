@@ -125,8 +125,8 @@ d3.json("../data/temperature.json").then(data => {
 
     const legendSvg = legendContainer
       .append("svg")
-      .attr("width", legendWidth + 80)
-      .attr("height", 80);
+      .attr("width", legendWidth + 360)
+      .attr("height", 140);
 
     const legendGradient = legendSvg
       .append("defs")
@@ -141,7 +141,7 @@ d3.json("../data/temperature.json").then(data => {
 
     // Gradient bar
     legendSvg.append("rect")
-      .attr("x", 40)
+      .attr("x", 180)
       .attr("y", 15)
       .attr("width", legendWidth)
       .attr("height", legendHeight)
@@ -149,15 +149,23 @@ d3.json("../data/temperature.json").then(data => {
 
     // Axis BELOW the bar with spacing
     legendSvg.append("g")
-      .attr("transform", `translate(40,${15 + legendHeight + 12})`)
+      .attr("transform", `translate(180,${15 + legendHeight + 12})`)
       .call(d3.axisBottom(legendScale).ticks(6))
       .attr("class", "legend-axis");
 
     // Label with generous spacing
     legendSvg.append("text")
-      .attr("x", (legendWidth + 80) / 2)
-      .attr("y", 80)
+      .attr("x", (legendWidth + 360) / 2)
+      .attr("y", 90)
       .attr("text-anchor", "middle")
       .attr("class", "legend-label")
       .text("Temperature deviation (°C)");
+
+    // Label descriptopm
+    legendSvg.append("text")
+    .attr("x", (legendWidth + 360) / 2)
+    .attr("y", 115)
+    .attr("text-anchor", "middle")
+    .attr("class", "legend-caption")
+    .text("Blue colors indicate colder-than-average years, red colors warmer-than-average.");
 });

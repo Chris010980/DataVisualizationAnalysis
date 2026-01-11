@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Education Level by County (USA)</title>
+
+  <meta
+    name="description"
+    content="Choropleth map showing the share of population holding a bachelor's degree in US counties."
+  />
+
+  <link rel="stylesheet" href="../css/style.css" />
+
+  <!-- D3 -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+
+<body>
+
+  <header>
+    <h1>Education Level by County (USA)</h1>
+    <p>
+      Choropleth map showing the percentage of the population holding a
+      bachelor's degree at county level.
+    </p>
+  </header>
+
+  <main>
+
+    <section class="container">
+
+      <div class="header">
+        <div id="description"></div>
+        <div id="legend"></div>
+      </div>
+
+      <div class="plotarea">
+        <div id="choropleth"></div>
+        <div id="tooltip"></div>
+      </div>
+
+      <figcaption class="caption">
+        County-level educational attainment visualized as a choropleth map.
+        Color intensity reflects the share of residents holding a bachelor's
+        degree or higher.
+      </figcaption>
+
+    </section>
+
+    <section>
+      <p>
+        <a href="../index.html">← Back to overview</a>
+      </p>
+    </section>
+
+  </main>
+
+  <script src="../js/choropleth.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js'></script>
+
+</body>
+</html>

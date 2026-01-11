@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Tour de France Performance & Doping Allegations</title>
+
+  <meta
+    name="description"
+    content="Scatterplot visualization comparing Tour de France stage times with later doping allegations."
+  />
+
+  <link rel="stylesheet" href="../css/style.css" />
+
+  <!-- D3 -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+
+<body>
+
+  <header>
+    <h1>Tour de France Performance & Doping Allegations</h1>
+    <p>
+      Scatterplot analysis comparing stage times of Tour de France riders with
+      later doping allegations.
+    </p>
+  </header>
+
+  <main>
+
+    <section class="container">
+
+      <div class="header">
+        <div id="description"></div>
+      </div>
+
+      <div class="plotarea">
+        <div id="scatter"></div>
+        <div id="tooltip"></div>
+      </div>
+
+      <figcaption class="caption">
+        Each point represents a rider. The visualization contrasts racing
+        performance with retrospective doping allegations, highlighting
+        structural performance differences.
+      </figcaption>
+
+    </section>
+
+    <section>
+      <p>
+        <a href="../index.html">← Back to overview</a>
+      </p>
+    </section>
+
+  </main>
+
+  <script src="../js/scatter.js"></script>
+
+</body>
+</html>

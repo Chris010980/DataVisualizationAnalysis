@@ -62,3 +62,51 @@ h1, h2, h3 {
   font-size: 15px;
   font-weight: 600;
 }
+
+.figure {
+  margin: 40px auto;
+}
+
+.figure-caption {
+  font-size: 14px;
+  color: #555;
+  text-align: center;
+  margin-top: 8px;
+  font-style: italic;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.figure-caption::before {
+  content: "Figure: ";
+  font-weight: bold;
+}
+
+.hero {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.profile-pic {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.caption {
+  max-width: 900px;
+  margin: 16px auto 0;
+  font-size: 0.95rem;
+  color: #555;
+  text-align: center;
+}
+
+.responsive-image {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}

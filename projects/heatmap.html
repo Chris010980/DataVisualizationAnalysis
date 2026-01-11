@@ -32,7 +32,7 @@
 <header class="header">
   <h1>Global Temperature Anomalies</h1>
   <p>
-    Monthly global land-surface temperature deviations since 1880,
+    Monthly global land-surface temperature deviations since 1753,
     shown as an interactive heatmap.
   </p>
   <div id="description"></div>
@@ -40,8 +40,15 @@
 </header>
 
 <main>
-  <section>
+  <section class="container">
     <div id="heatmap"></div>
+    <figure class="figure">
+      <div id="heatmap"></div>
+      <figcaption class="figure-caption">
+        Monthly global surface temperature anomalies relative to the 1951–1980 baseline.
+        Data source: NOAA / freeCodeCamp.
+      </figcaption>
+    </figure>
   </section>
 
   <section>
@@ -56,6 +63,12 @@
     <h2>Data Source</h2>
     <p>
       NOAA / NASA GISS global temperature dataset.
+    </p>
+  </section>
+
+  <section>
+    <p>
+      <a href="../index.html">← Back to overview</a>
     </p>
   </section>
 </main>
