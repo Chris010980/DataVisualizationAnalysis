@@ -115,46 +115,48 @@ d3.json("../data/temperature.json").then(data => {
     .attr("transform", `translate(${margin.left},0)`)
     .call(yAxis);
 
-  // -------- Legend --------
-  const legendWidth = 300;
-  const legendHeight = 12;
+    // -------- Legend --------
+    const legendWidth = 360;
+    const legendHeight = 18;
 
-  const legendScale = d3.scaleLinear()
-    .domain([zMin, zMax])
-    .range([0, legendWidth]);
+    const legendScale = d3.scaleLinear()
+      .domain([zMin, zMax])
+      .range([0, legendWidth]);
 
-  const legendSvg = legendContainer
-    .append("svg")
-    .attr("width", legendWidth + 60)
-    .attr("height", 50);
+    const legendSvg = legendContainer
+      .append("svg")
+      .attr("width", legendWidth + 80)
+      .attr("height", 80);
 
-  const legendGradient = legendSvg
-    .append("defs")
-    .append("linearGradient")
-    .attr("id", "legend-gradient");
+    const legendGradient = legendSvg
+      .append("defs")
+      .append("linearGradient")
+      .attr("id", "legend-gradient");
 
-  d3.range(0, 1.01, 0.01).forEach(t => {
-    legendGradient.append("stop")
-      .attr("offset", `${t * 100}%`)
-      .attr("stop-color", colorScale(zMin + t * (zMax - zMin)));
-  });
+    d3.range(0, 1.01, 0.01).forEach(t => {
+      legendGradient.append("stop")
+        .attr("offset", `${t * 100}%`)
+        .attr("stop-color", colorScale(zMin + t * (zMax - zMin)));
+    });
 
-  legendSvg.append("rect")
-    .attr("x", 30)
-    .attr("y", 10)
-    .attr("width", legendWidth)
-    .attr("height", legendHeight)
-    .style("fill", "url(#legend-gradient)");
+    // Gradient bar
+    legendSvg.append("rect")
+      .attr("x", 40)
+      .attr("y", 15)
+      .attr("width", legendWidth)
+      .attr("height", legendHeight)
+      .style("fill", "url(#legend-gradient)");
 
-  legendSvg.append("g")
-    .attr("transform", `translate(30,${10 + legendHeight})`)
-    .call(d3.axisBottom(legendScale).ticks(6))
-    .attr("class", "legend-axis");
+    // Axis BELOW the bar with spacing
+    legendSvg.append("g")
+      .attr("transform", `translate(40,${15 + legendHeight + 12})`)
+      .call(d3.axisBottom(legendScale).ticks(6))
+      .attr("class", "legend-axis");
 
-  legendSvg.append("text")
-    .attr("x", (legendWidth + 60) / 2)
-    .attr("y", 45)
-    .attr("text-anchor", "top")
-    .attr("class", "legend-label")
-    .text("Temperature deviation (°C)");
-});
+    // Label with generous spacing
+    legendSvg.append("text")
+      .attr("x", (legendWidth + 80) / 2)
+      .attr("y", 70)
+      .attr("text-anchor", "middle")
+      .attr("class", "legend-label")
+      .text("Temperature deviation (°C)");
