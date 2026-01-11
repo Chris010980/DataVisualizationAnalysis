@@ -154,7 +154,7 @@ d3.json("../data/temperature.json").then(data => {
   legendSvg.append("text")
     .attr("x", (legendWidth + 60) / 2)
     .attr("y", 45)
-    .attr("text-anchor", "middle")
+    .attr("text-anchor", "top")
     .attr("class", "legend-label")
     .text("Temperature deviation (°C)");
 });
