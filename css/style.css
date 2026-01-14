@@ -146,6 +146,7 @@ h1, h2, h3 {
 ------------------------------ */
 
 img {
+  width: auto;
   max-width: 100%;
   height: auto;
   display: block;
@@ -153,14 +154,20 @@ img {
 
 /* Container für Projektabbildungen */
 figure {
+  width: auto;
   max-width: 900px;
+  height: auto;
   margin: 2rem auto;
 }
 
 /* Einheitliches Projektbild */
-.responsive-image {
-  width: 100%;
-  height: auto;
+
+.plot-image {
+    height: 500px;      /* oder was du willst */
+    width: auto;
+    max-width: 100%;
+    display: block;
+    margin: 0 auto;     /* optional zentrieren */
 }
 
 .profile-image-wrapper {
