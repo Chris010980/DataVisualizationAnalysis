@@ -4,7 +4,14 @@ const container = document.querySelector("#choropleth");
 const width  = container.clientWidth;
 const height = Math.round(width * 0.6);
 
-const margin = { top: 40, right: 20, bottom: 30, left: 20 };
+const isMobile = width < 480;
+
+const margin = {
+  top: 40,
+  right: isMobile ? 10 : 20,
+  bottom: isMobile ? 20 : 30,
+  left: isMobile ? 10 : 20
+};
 const innerWidth  = width  - margin.left - margin.right;
 const innerHeight = height - margin.top  - margin.bottom;
 

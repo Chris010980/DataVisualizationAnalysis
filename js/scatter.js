@@ -3,11 +3,13 @@ const container = d3.select("#scatter");
 const width  = container.node().clientWidth;
 const height = Math.round(width * 0.55);
 
+const isMobile = width < 480;
+
 const margin = {
   top: 40,
-  right: 30,
-  bottom: 70,
-  left: 80
+  right: isMobile ? 12 : 30,
+  bottom: isMobile ? 50 : 70,
+  left: isMobile ? 45 : 80
 };
 
 const innerWidth  = width  - margin.left - margin.right;
@@ -139,33 +141,50 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
       .attr("text-anchor", "middle")
       .text("Time (minutes)");
 
-    // ---------- Legend (inside plot, top-right) ----------
-    const legend = g.append("g")
-      .attr("class", "legend")
-      .attr("transform", `translate(${innerWidth - 160}, 10)`);
+      // ---------- Legend ----------
+      const legendItems = [
+        { label: "Doping allegations", value: true },
+        { label: "No allegations", value: false }
+      ];
 
-    const legendItems = [
-      { label: "Doping allegations", value: true },
-      { label: "No allegations", value: false }
-    ];
+      // Position abhängig vom Viewport
+      let legendX, legendY;
 
-    legend.selectAll("rect")
-      .data(legendItems)
-      .enter()
-      .append("rect")
-      .attr("x", 0)
-      .attr("y", (d, i) => i * 22)
-      .attr("width", 14)
-      .attr("height", 14)
-      .attr("fill", d => colorScale(d.value));
+      if (isMobile) {
+        // unterhalb des Plots
+        legendX = margin.left;
+        legendY = innerHeight + 40;
+      } else {
+        // inside plot, top-right
+        legendX = innerWidth - 160;
+        legendY = 10;
+      }
 
-    legend.selectAll("text")
-      .data(legendItems)
-      .enter()
-      .append("text")
-      .attr("x", 22)
-      .attr("y", (d, i) => i * 22 + 11)
-      .attr("class", "legend-label")
-      .text(d => d.label);
+      const legend = g.append("g")
+        .attr("class", "legend")
+        .attr("transform", `translate(${legendX}, ${legendY})`);
+
+      // Optional: horizontal layout auf Mobile
+      const itemSpacingX = isMobile ? 140 : 0;
+      const itemSpacingY = isMobile ? 0 : 22;
+
+      legend.selectAll("rect")
+        .data(legendItems)
+        .enter()
+        .append("rect")
+        .attr("x", (d, i) => i * itemSpacingX)
+        .attr("y", (d, i) => i * itemSpacingY)
+        .attr("width", 14)
+        .attr("height", 14)
+        .attr("fill", d => colorScale(d.value));
+
+      legend.selectAll("text")
+        .data(legendItems)
+        .enter()
+        .append("text")
+        .attr("x", (d, i) => i * itemSpacingX + 22)
+        .attr("y", (d, i) => i * itemSpacingY + 11)
+        .attr("class", "legend-label")
+        .text(d => d.label);
 
   });

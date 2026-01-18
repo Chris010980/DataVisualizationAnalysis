@@ -41,7 +41,7 @@ h1, h2, h3 {
 
 .profile-pic {
   display: block;
-  width: clamp(160px, 15vw, 200px);
+  width: clamp(100px, 15vw, 160px);
   aspect-ratio: 1 / 1;
   border-radius: 50%;
   object-fit: cover;
@@ -140,11 +140,19 @@ figure {
 
 @media (max-width: 480px) {
   .axis text {
-    font-size: 10px;
+    font-size: 9px;
   }
 
   .axis-label {
-    font-size: 11px;
+    font-size: 10px;
+  }
+
+  .plot {
+    margin: 1.2rem auto;
+  }
+
+  #legend {
+    margin-top: 10px;
   }
 }
 
@@ -191,4 +199,15 @@ figure {
 .legend-axis path,
 .legend-axis line {
   stroke-width: 1;
+}
+
+#legend svg {
+  background: var(--legend-bg, #ffffff);
+  border-radius: 6px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --legend-bg: #1e1e1e;
+  }
 }

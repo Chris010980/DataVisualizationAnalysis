@@ -2,11 +2,13 @@ const container = document.querySelector("#heatmap");
 const width = container.clientWidth;
 const height = Math.round(width * 0.5);
 
+const isMobile = width < 480;
+
 const margin = {
   top: 40,
-  right: 30,
-  bottom: 70,
-  left: 80
+  right: isMobile ? 12 : 30,
+  bottom: isMobile ? 50 : 70,
+  left: isMobile ? 45 : 80
 };
 
 const legend = {
