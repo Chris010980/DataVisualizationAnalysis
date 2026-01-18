@@ -64,17 +64,6 @@ h1, h2, h3 {
   font-size: 11px;
 }
 
-.legend-label {
-  font-size: 13px;
-  font-weight: 600;
-  alignment-baseline: middle;
-}
-
-.legend-caption {
-  font-size: 11px;
-  fill: #555;
-}
-
 .legend-label2 {
   font-size: 8px;
   font-weight: 600;
@@ -114,11 +103,18 @@ h1, h2, h3 {
 }
 
 .profile-pic {
-  width: 120px;
-  height: 120px;
+  display: block;
+
+  width: clamp(72px, 18vw, 160px);
+  aspect-ratio: 1 / 1;
+
   border-radius: 50%;
   object-fit: cover;
-  aspect-ratio: 1 / 1;
+
+  margin: 0 auto 1rem;
+
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px rgba(0, 0, 0, 0.15);
 }
 
 .caption {

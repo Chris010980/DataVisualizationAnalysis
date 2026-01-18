@@ -1,7 +1,7 @@
 // --------------------
 // Layout & helpers
 // --------------------
-const container = d3.select(".plotarea");
+const container = d3.select("#scatter");
 const containerWidth = container.node().clientWidth;
 
 const width = containerWidth;
