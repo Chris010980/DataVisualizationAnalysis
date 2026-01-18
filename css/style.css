@@ -105,7 +105,7 @@ h1, h2, h3 {
 .profile-pic {
   display: block;
 
-  width: clamp(72px, 18vw, 160px);
+  width: clamp(120px, 15vw, 240px);
   aspect-ratio: 1 / 1;
 
   border-radius: 50%;
@@ -114,7 +114,7 @@ h1, h2, h3 {
   margin: 0 auto 1rem;
 
   border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 4px rgba(0, 0, 0, 0.15);
+  box-shadow: 5px 5px rgba(0, 0, 0, 0.15);
 }
 
 .caption {
