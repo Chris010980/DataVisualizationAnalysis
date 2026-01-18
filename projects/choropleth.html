@@ -29,20 +29,22 @@
 
   <main>
 
-    <section class="container">
-      <div id="description"></div>
-      <div id="legend"></div>
-      <div class="plotarea">
+    <section class="container figure d3-figure">
+      <header class="figure-header">
+        <div id="description"></div>
+      </header>
+
+      <div class="figure-body">
         <div id="choropleth"></div>
+        <div id="legend"></div>
         <div id="tooltip"></div>
       </div>
 
-      <figcaption class="caption">
+      <figcaption class="figure-caption">
         County-level educational attainment visualized as a choropleth map.
         Color intensity reflects the share of residents holding a bachelor's
         degree or higher.
       </figcaption>
-
     </section>
 
     <section>

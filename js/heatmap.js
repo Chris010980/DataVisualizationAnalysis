@@ -54,8 +54,8 @@ d3.json("../data/temperature.json").then(data => {
 
   // Description
   description.html(`
-    <h3>Global Temperature Variance</h3>
-    <p>
+    <h3 class="figure-title">Global Temperature Variance</h3>
+    <p class="figure-meta">
       Period: ${years[0]} – ${years[years.length - 1]}<br>
       Base temperature: ${baseTemp} °C
     </p>
@@ -128,11 +128,11 @@ d3.json("../data/temperature.json").then(data => {
       .domain([zMin, zMax])
       .range([0, legendWidth]);
 
-      const legendSvg = legendContainer
-        .append("svg")
-        .attr("viewBox", `0 0 ${legendWidth + 360} 140`)
-        .style("width", "100%")
-        .style("height", "auto");
+    const legendSvg = legendContainer
+      .append("svg")
+      .attr("viewBox", `0 0 ${legendWidth + 360} 140`)
+      .attr("preserveAspectRatio", "xMidYMid meet")
+      .classed("legend-svg", true);
 
     const legendGradient = legendSvg
       .append("defs")

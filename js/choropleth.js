@@ -1,18 +1,18 @@
 // ---------- Layout ----------
-const container = document.querySelector(".plotarea");
+const container = document.querySelector("#choropleth");
 const width = container.clientWidth;
 const height = Math.round(width * 0.6);
 
 const margin = { top: 20, right: 20, bottom: 20, left: 20 };
 
 // Tooltip
-const tooltip = d3.select(".plotarea")
+const tooltip = d3.select("#choropleth")
   .append("div")
   .attr("id", "tooltip")
   .style("visibility", "hidden");
 
 // SVG
-const svg = d3.select(".plotarea")
+const svg = d3.select("#choropleth")
   .append("svg")
   .attr("viewBox", `0 0 ${width} ${height}`)
   .attr("preserveAspectRatio", "xMidYMid meet")
@@ -90,8 +90,8 @@ Promise.all([
 
   // ---------- Description ----------
   description.html(`
-    <h3>Educational Attainment in the United States</h3>
-    <p>
+    <h3 class="figure-title">Educational Attainment in the United States</h3>
+    <p class="figure-meta">
       Share of adults (25+) holding at least a bachelor's degree,
       shown at county level.
     </p>
@@ -141,13 +141,13 @@ Promise.all([
     .attr("x", (legendWidth + 160) / 2)
     .attr("y", 72)
     .attr("text-anchor", "middle")
-    .attr("class", "legend-label2")
+    .attr("class", "legend-label")
     .text("Population with bachelor's degree (%)");
 
   legendSvg.append("text")
     .attr("x", (legendWidth + 160) / 2)
     .attr("y", 92)
     .attr("text-anchor", "middle")
-    .attr("class", "legend-caption2")
+    .attr("class", "legend-caption")
     .text("County-level data; darker green indicates higher values.");
 });
