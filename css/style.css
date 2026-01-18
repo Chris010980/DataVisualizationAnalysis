@@ -25,10 +25,6 @@ h1, h2, h3 {
   font-weight: 600;
 }
 
-.axis-label {
-  font-size: 16px;
-  font-weight: 600;
-}
 
 .cell {
   stroke: none;
@@ -98,7 +94,7 @@ h1, h2, h3 {
 
 .hero {
   display: flex;
-  gap: 24px;
+  gap: 15px;
   align-items: center;
 }
 
@@ -114,7 +110,17 @@ h1, h2, h3 {
   margin: 0 auto 1rem;
 
   border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 5px 5px rgba(0, 0, 0, 0.15);
+}
+
+@media (hover: hover) {
+  .profile-pic {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .profile-pic:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  }
 }
 
 .caption {
@@ -235,12 +241,41 @@ figure {
 
 /* Main label */
 .legend-label {
-  font-size: clamp(0.75rem, 2vw, 0.95rem);
-  font-weight: 500;
+  font-size: clamp(10px, 1.6vw, 12px);
+  fill: #222;
+  dominant-baseline: middle;
 }
 
 /* Caption under legend */
 .legend-caption {
   font-size: clamp(0.65rem, 1.7vw, 0.8rem);
   fill: #555;
+}
+
+.axis path,
+.axis line {
+  stroke: #666;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  fill: #444;
+  font-size: clamp(10px, 1.8vw, 12px);
+}
+
+.axis-label {
+  font-size: clamp(11px, 2vw, 13px);
+  font-weight: 500;
+  fill: #222;
+}
+
+@media (max-width: 480px) {
+  .axis text {
+    font-size: 10px;
+  }
+
+  .axis-label {
+    font-size: 11px;
+  }
 }

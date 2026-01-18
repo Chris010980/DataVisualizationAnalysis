@@ -106,40 +106,65 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
     // --------------------
     // Axes
     // --------------------
+    const xTicks =
+      width < 500 ? 4 :
+      width < 800 ? 6 :
+      8;
+
+    const xAxis = d3.axisBottom(xScale)
+      .ticks(xTicks);
+
     svg.append("g")
       .attr("id", "x-axis")
-      .attr("class", "axis")
+      .attr("class", "axis axis-x")
       .attr("transform", `translate(0,${height - margin.bottom})`)
-      .call(d3.axisBottom(xScale).ticks(8));
+      .call(xAxis);
+
+    const yTicks =
+      height < 400 ? 4 : 6;
+
+    const yAxis = d3.axisLeft(yScale)
+      .ticks(yTicks)
+      .tickFormat(formatMinSec);
 
     svg.append("g")
       .attr("id", "y-axis")
-      .attr("class", "axis")
+      .attr("class", "axis axis-y")
       .attr("transform", `translate(${margin.left},0)`)
-      .call(d3.axisLeft(yScale).tickFormat(formatMinSec));
+      .call(yAxis);
 
     // Axis labels
     svg.append("text")
-      .attr("class", "axis-label")
+      .attr("class", "axis-label axis-label-x")
       .attr("x", width / 2)
-      .attr("y", height - 20)
+      .attr("y", height - 6)
       .attr("text-anchor", "middle")
       .text("Year");
 
     svg.append("text")
-      .attr("class", "axis-label")
+      .attr("class", "axis-label axis-label-y")
       .attr("transform", "rotate(-90)")
       .attr("x", -height / 2)
-      .attr("y", 20)
+      .attr("y", 14)
       .attr("text-anchor", "middle")
       .text("Time (minutes)");
 
     // --------------------
     // Legend (same style as other plots)
     // --------------------
+    const legendX =
+      width < 500
+        ? margin.left
+        : width - margin.right - 160;
+
+    const legendY =
+      width < 500
+        ? height - margin.bottom - 60
+        : margin.top;
+
     const legend = svg.append("g")
       .attr("class", "legend")
-      .attr("transform", `translate(${width - margin.right - 160},${margin.top})`);
+      .attr("transform", `translate(${legendX},${legendY})`);
 
     const legendItems = [
       { label: "Doping allegations", value: true },
@@ -151,7 +176,7 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
       .enter()
       .append("rect")
       .attr("x", 0)
-      .attr("y", (d, i) => i * 24)
+      .attr("y", (d, i) => i * 22)
       .attr("width", 14)
       .attr("height", 14)
       .attr("fill", d => colorScale(d.value));
@@ -161,7 +186,7 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
       .enter()
       .append("text")
       .attr("x", 22)
-      .attr("y", (d, i) => i * 24 + 11)
+      .attr("y", (d, i) => i * 22 + 11)
       .attr("class", "legend-label")
       .text(d => d.label);
 

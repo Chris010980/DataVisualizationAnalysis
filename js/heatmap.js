@@ -93,30 +93,39 @@ d3.json("../data/temperature.json").then(data => {
     });
 
   // X axis
+  const xTickStep =
+    width < 500 ? 50 :
+    width < 800 ? 30 :
+    20;
+
   const xAxis = d3.axisBottom(xScale)
-    .tickValues(years.filter(y => y % 20 === 0))
+    .tickValues(years.filter(y => y % xTickStep === 0))
     .tickFormat(d => formatYear(parseYear(d)));
 
   svg.append("g")
     .attr("id", "x-axis")
-    .attr("class", "axis")
+    .attr("class", "axis axis-x")
     .attr("transform", `translate(0,${height - margin.bottom})`)
     .call(xAxis);
 
-  svg.append("text")
-    .attr("class", "axis-label")
-    .attr("x", width / 2)
-    .attr("y", height - 20)
-    .attr("text-anchor", "middle")
-    .text("Year");
+    svg.append("text")
+      .attr("class", "axis-label axis-label-x")
+      .attr("x", width / 2)
+      .attr("y", height - 6)
+      .attr("text-anchor", "middle")
+      .text("Year");
 
   // Y axis
   const yAxis = d3.axisLeft(yScale)
-    .tickFormat(d => formatMonth(parseMonth(d)));
+    .tickFormat(d =>
+      width < 500
+        ? formatMonth(parseMonth(d)).slice(0, 3)
+        : formatMonth(parseMonth(d))
+    );
 
   svg.append("g")
     .attr("id", "y-axis")
-    .attr("class", "axis")
+    .attr("class", "axis axis-y")
     .attr("transform", `translate(${margin.left},0)`)
     .call(yAxis);
 
