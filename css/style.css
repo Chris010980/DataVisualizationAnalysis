@@ -206,8 +206,8 @@ figure {
   border-radius: 6px;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --legend-bg: #1e1e1e;
   }
-}
+} */
