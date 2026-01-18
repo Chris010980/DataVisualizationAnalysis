@@ -1,79 +1,76 @@
-// --------------------
-// Layout & helpers
-// --------------------
+// ---------- Layout ----------
 const container = d3.select("#scatter");
-const containerWidth = container.node().clientWidth;
+const width  = container.node().clientWidth;
+const height = Math.round(width * 0.55);
 
-const width = containerWidth;
-const height = 450;
+const margin = {
+  top: 40,
+  right: 30,
+  bottom: 70,
+  left: 80
+};
 
-const margin = { top: 40, right: 30, bottom: 70, left: 80 };
+const innerWidth  = width  - margin.left - margin.right;
+const innerHeight = height - margin.top  - margin.bottom;
 
-// Time helpers
-const parseYear = d3.timeParse("%Y");
-const parseSeconds = d3.timeParse("%s");
-const formatYear = d3.timeFormat("%Y");
-const formatMinSec = d3.timeFormat("%M:%S");
+// ---------- Time helpers ----------
+const parseYear     = d3.timeParse("%Y");
+const parseSeconds  = d3.timeParse("%s");
+const formatYear    = d3.timeFormat("%Y");
+const formatMinSec  = d3.timeFormat("%M:%S");
 
-// Tooltip
+// ---------- Tooltip ----------
 const tooltip = d3.select("#tooltip");
 
-// --------------------
-// Load data
-// --------------------
+// ---------- SVG ----------
+const svg = container.append("svg")
+  .attr("viewBox", `0 0 ${width} ${height}`)
+  .style("width", "100%")
+  .style("height", "auto");
+
+const g = svg.append("g")
+  .attr("class", "plot")
+  .attr("transform", `translate(${margin.left},${margin.top})`);
+
+// ---------- Load data ----------
 d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json")
   .then(data => {
 
-    // --------------------
-    // Data preparation
-    // --------------------
+    // ---------- Data preparation ----------
     data.forEach(d => {
       d.YearParsed = parseYear(d.Year);
       d.TimeParsed = parseSeconds(d.Seconds);
-      d.HasDoping = d.Doping !== "";
+      d.HasDoping  = d.Doping !== "";
     });
 
     const xExtent = d3.extent(data, d => d.YearParsed);
     const yExtent = d3.extent(data, d => d.TimeParsed);
 
-    // Add padding
     const xDomain = [
       d3.timeYear.offset(xExtent[0], -1),
-      d3.timeYear.offset(xExtent[1], 1)
+      d3.timeYear.offset(xExtent[1],  1)
     ];
 
     const yDomain = [
-      d3.timeSecond.offset(yExtent[1], 15),
+      d3.timeSecond.offset(yExtent[1],  15),
       d3.timeSecond.offset(yExtent[0], -15)
     ];
 
-    // --------------------
-    // Scales
-    // --------------------
+    // ---------- Scales ----------
     const xScale = d3.scaleTime()
       .domain(xDomain)
-      .range([margin.left, width - margin.right]);
+      .range([0, innerWidth]);
 
     const yScale = d3.scaleTime()
       .domain(yDomain)
-      .range([height - margin.bottom, margin.top]);
+      .range([innerHeight, 0]);
 
     const colorScale = d3.scaleOrdinal()
       .domain([true, false])
-      .range(["#4575b4", "#fdae61"]); // blue / orange (ColorBrewer-like)
+      .range(["#4575b4", "#fdae61"]);
 
-    // --------------------
-    // SVG
-    // --------------------
-    const svg = container.append("svg")
-      .attr("viewBox", `0 0 ${width} ${height}`)
-      .style("width", "100%")
-      .style("height", "auto");
-
-    // --------------------
-    // Points
-    // --------------------
-    svg.selectAll(".dot")
+    // ---------- Points ----------
+    g.selectAll(".dot")
       .data(data)
       .enter()
       .append("circle")
@@ -96,75 +93,56 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
       })
       .on("mousemove", event => {
         tooltip
-          .style("left", `${event.pageX + 15}px`)
-          .style("top", `${event.pageY - 30}px`);
+          .style("left", `${event.pageX + 12}px`)
+          .style("top", `${event.pageY - 28}px`);
       })
       .on("mouseout", () => {
         tooltip.style("visibility", "hidden");
       });
 
-    // --------------------
-    // Axes
-    // --------------------
+    // ---------- Axes ----------
     const xTicks =
-      width < 500 ? 4 :
-      width < 800 ? 6 :
-      8;
-
-    const xAxis = d3.axisBottom(xScale)
-      .ticks(xTicks);
-
-    svg.append("g")
-      .attr("id", "x-axis")
-      .attr("class", "axis axis-x")
-      .attr("transform", `translate(0,${height - margin.bottom})`)
-      .call(xAxis);
+      innerWidth < 400 ? 4 :
+      innerWidth < 700 ? 6 : 8;
 
     const yTicks =
-      height < 400 ? 4 : 6;
+      innerHeight < 300 ? 4 : 6;
 
-    const yAxis = d3.axisLeft(yScale)
-      .ticks(yTicks)
-      .tickFormat(formatMinSec);
+    g.append("g")
+      .attr("id", "x-axis")
+      .attr("class", "axis axis-x")
+      .attr("transform", `translate(0,${innerHeight})`)
+      .call(d3.axisBottom(xScale).ticks(xTicks));
 
-    svg.append("g")
+    g.append("g")
       .attr("id", "y-axis")
       .attr("class", "axis axis-y")
-      .attr("transform", `translate(${margin.left},0)`)
-      .call(yAxis);
+      .call(
+        d3.axisLeft(yScale)
+          .ticks(yTicks)
+          .tickFormat(formatMinSec)
+      );
 
-    // Axis labels
+    // ---------- Axis labels ----------
     svg.append("text")
       .attr("class", "axis-label axis-label-x")
-      .attr("x", width / 2)
-      .attr("y", height - 6)
+      .attr("x", margin.left + innerWidth / 2)
+      .attr("y", height - 10)
       .attr("text-anchor", "middle")
       .text("Year");
 
     svg.append("text")
       .attr("class", "axis-label axis-label-y")
       .attr("transform", "rotate(-90)")
-      .attr("x", -height / 2)
-      .attr("y", 14)
+      .attr("x", -(margin.top + innerHeight / 2))
+      .attr("y", 18)
       .attr("text-anchor", "middle")
       .text("Time (minutes)");
 
-    // --------------------
-    // Legend (same style as other plots)
-    // --------------------
-    const legendX =
-      width < 500
-        ? margin.left
-        : width - margin.right - 160;
-
-    const legendY =
-      width < 500
-        ? height - margin.bottom - 60
-        : margin.top;
-
-    const legend = svg.append("g")
+    // ---------- Legend (inside plot, top-right) ----------
+    const legend = g.append("g")
       .attr("class", "legend")
-      .attr("transform", `translate(${legendX},${legendY})`);
+      .attr("transform", `translate(${innerWidth - 160}, 10)`);
 
     const legendItems = [
       { label: "Doping allegations", value: true },

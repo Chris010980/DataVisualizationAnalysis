@@ -1,29 +1,35 @@
+
 // ---------- Layout ----------
 const container = document.querySelector("#choropleth");
-const width = container.clientWidth;
+const width  = container.clientWidth;
 const height = Math.round(width * 0.6);
 
-const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+const margin = { top: 40, right: 20, bottom: 30, left: 20 };
+const innerWidth  = width  - margin.left - margin.right;
+const innerHeight = height - margin.top  - margin.bottom;
 
-// Tooltip
+// ---------- Tooltip ----------
 const tooltip = d3.select("#choropleth")
   .append("div")
   .attr("id", "tooltip")
   .style("visibility", "hidden");
 
-// SVG
+// ---------- SVG ----------
 const svg = d3.select("#choropleth")
   .append("svg")
   .attr("viewBox", `0 0 ${width} ${height}`)
-  .attr("preserveAspectRatio", "xMidYMid meet")
   .style("width", "100%")
   .style("height", "auto");
 
-// Description & legend containers
+const g = svg.append("g")
+  .attr("class", "plot")
+  .attr("transform", `translate(${margin.left},${margin.top})`);
+
+// ---------- Description & Legend ----------
 const description = d3.select("#description");
 const legendContainer = d3.select("#legend");
 
-// Geo
+// ---------- Projection ----------
 const projection = d3.geoIdentity();
 const path = d3.geoPath(projection);
 
@@ -40,17 +46,17 @@ Promise.all([
   const minEdu = d3.min(education, d => d.bachelorsOrHigher);
   const maxEdu = d3.max(education, d => d.bachelorsOrHigher);
 
-  // Color scale (sequential, like Heatmap)
+  // ---------- Color Scale ----------
   const colorScale = d3.scaleSequential()
-    .interpolator(d3.interpolateGreens)
-    .domain([minEdu, maxEdu]);
+    .domain([minEdu, maxEdu])
+    .interpolator(d3.interpolateGreens);
 
-  // Topo → Geo
+  // ---------- Geo ----------
   const geojson = topojson.feature(counties, counties.objects.counties);
-  projection.fitSize([width, height], geojson);
+  projection.fitSize([innerWidth, innerHeight], geojson);
 
   // ---------- Map ----------
-  svg.append("g")
+  g.append("g")
     .selectAll("path")
     .data(geojson.features)
     .enter()
@@ -62,7 +68,7 @@ Promise.all([
       return edu ? colorScale(edu.bachelorsOrHigher) : "#eee";
     })
     .attr("stroke", "#fff")
-    .attr("stroke-width", 0.2)
+    .attr("stroke-width", 0.3)
     .attr("data-fips", d => d.id)
     .attr("data-education", d => {
       const edu = educationByFips.get(d.id);
@@ -76,13 +82,13 @@ Promise.all([
         .style("visibility", "visible")
         .html(`
           <strong>${edu.area_name}, ${edu.state}</strong><br>
-          Bachelor's degree or higher: ${edu.bachelorsOrHigher.toFixed(1)} %
+          Bachelor's degree or higher: ${edu.bachelorsOrHigher.toFixed(1)}%
         `);
     })
     .on("mousemove", event => {
       tooltip
-        .style("left", `${event.pageX + 15}px`)
-        .style("top", `${event.pageY - 30}px`);
+        .style("left", `${event.pageX + 12}px`)
+        .style("top", `${event.pageY - 28}px`);
     })
     .on("mouseout", () => {
       tooltip.style("visibility", "hidden");
@@ -92,13 +98,13 @@ Promise.all([
   description.html(`
     <h3 class="figure-title">Educational Attainment in the United States</h3>
     <p class="figure-meta">
-      Share of adults (25+) holding at least a bachelor's degree,
+      Share of adults aged 25+ holding at least a bachelor's degree,
       shown at county level.
     </p>
   `);
 
-  // ---------- Legend (same style as Heatmap) ----------
-  const legendWidth = Math.min(300, width * 0.5);
+  // ---------- Legend ----------
+  const legendWidth  = Math.min(320, width * 0.6);
   const legendHeight = 12;
 
   const legendScale = d3.scaleLinear()
@@ -111,9 +117,10 @@ Promise.all([
     .style("width", "100%")
     .style("height", "auto");
 
+  // Gradient
   const gradient = legendSvg.append("defs")
     .append("linearGradient")
-    .attr("id", "legend-gradient");
+    .attr("id", "choropleth-gradient");
 
   d3.range(0, 1.01, 0.01).forEach(t => {
     gradient.append("stop")
@@ -123,14 +130,14 @@ Promise.all([
 
   legendSvg.append("rect")
     .attr("x", 80)
-    .attr("y", 16)
+    .attr("y", 18)
     .attr("width", legendWidth)
     .attr("height", legendHeight)
-    .style("fill", "url(#legend-gradient)");
+    .style("fill", "url(#choropleth-gradient)");
 
   legendSvg.append("g")
-    .attr("transform", `translate(80,${16 + legendHeight + 8})`)
-    .attr("class", "legend-axis2")
+    .attr("class", "legend-axis")
+    .attr("transform", `translate(80,${18 + legendHeight + 8})`)
     .call(
       d3.axisBottom(legendScale)
         .ticks(5)
@@ -139,14 +146,14 @@ Promise.all([
 
   legendSvg.append("text")
     .attr("x", (legendWidth + 160) / 2)
-    .attr("y", 72)
+    .attr("y", 74)
     .attr("text-anchor", "middle")
     .attr("class", "legend-label")
     .text("Population with bachelor's degree (%)");
 
   legendSvg.append("text")
     .attr("x", (legendWidth + 160) / 2)
-    .attr("y", 92)
+    .attr("y", 94)
     .attr("text-anchor", "middle")
     .attr("class", "legend-caption")
     .text("County-level data; darker green indicates higher values.");
