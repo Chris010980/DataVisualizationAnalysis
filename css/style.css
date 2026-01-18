@@ -1,3 +1,7 @@
+/* =========================================================
+   Base layout & typography
+========================================================= */
+
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   max-width: 1200px;
@@ -12,6 +16,11 @@ h1, h2, h3 {
   font-weight: 600;
 }
 
+
+/* =========================================================
+   Containers & sections
+========================================================= */
+
 .container {
   background-color: #ffffff;
   padding: 30px;
@@ -20,77 +29,9 @@ h1, h2, h3 {
 }
 
 
-.axis {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-
-.cell {
-  stroke: none;
-}
-
-#tooltip {
-  position: absolute;
-  pointer-events: none;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  font-size: 14px;
-  visibility: hidden;
-  font-size: clamp(0.65rem, 2vw, 0.8rem);
-  line-height: 1.3;
-  padding: 0.4rem 0.5rem;
-}
-
-#legend {
-  margin-top: 20px;
-  text-align: center;
-}
-
-.legend-axis {
-  font-size: 13px;
-}
-
-.legend-axis2 {
-  font-size: 8px;
-}
-
-.legend-axis text {
-  font-size: 11px;
-}
-
-.legend-label2 {
-  font-size: 8px;
-  font-weight: 600;
-  alignment-baseline: middle;
-}
-
-.legend-caption2 {
-  font-size: 7px;
-  fill: #555;
-}
-
-.dot {
-  stroke: #333;
-  stroke-width: 0.5;
-}
-
-.figure {
-  margin: 40px auto;
-}
-
-.figure-caption {
-  font-size: clamp(0.7rem, 2vw, 0.85rem);
-  color: #444;
-  margin-top: 0.6rem;
-  line-height: 1.4;
-}
-
-.figure-caption::before {
-  content: "Figure: ";
-  font-weight: bold;
-}
+/* =========================================================
+   Hero / Profile
+========================================================= */
 
 .hero {
   display: flex;
@@ -100,15 +41,11 @@ h1, h2, h3 {
 
 .profile-pic {
   display: block;
-
   width: clamp(160px, 15vw, 200px);
   aspect-ratio: 1 / 1;
-
   border-radius: 50%;
   object-fit: cover;
-
   margin: 0 auto 1rem;
-
   border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
@@ -123,12 +60,20 @@ h1, h2, h3 {
   }
 }
 
-.caption {
+
+/* =========================================================
+   Figures & media
+========================================================= */
+
+figure {
   max-width: 900px;
-  margin: 16px auto 0;
-  font-size: 0.95rem;
-  color: #555;
+  margin: 2rem auto;
+}
+
+.plot {
+  margin: 2rem auto;
   text-align: center;
+  overflow-x: auto;
 }
 
 .responsive-image {
@@ -138,119 +83,42 @@ h1, h2, h3 {
   margin: 0 auto;
 }
 
-.plot {
-  overflow-x: auto;
-  margin: 2rem auto;
-  text-align: center;
-}
-
 .plot img {
   height: clamp(200px, 50vw, 500px);
   width: auto;
   max-width: 100%;
-  margin: auto;
 }
 
+.caption,
 .plot figcaption {
+  margin-top: 0.4rem;
   font-size: 0.85rem;
   color: #666;
-  margin-top: 0.4rem;
+  text-align: center;
 }
 
-/* ------------------------------
-   Global image handling
------------------------------- */
 
-img {
-  width: auto;
-  max-width: 100%;
-  height: auto;
-  display: block;
+/* =========================================================
+   Tooltip (D3)
+========================================================= */
+
+#tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  visibility: hidden;
+
+  font-size: clamp(0.65rem, 2vw, 0.8rem);
+  line-height: 1.3;
+  padding: 0.4rem 0.5rem;
 }
 
-/* Container für Projektabbildungen */
-figure {
-  width: auto;
-  max-width: 900px;
-  height: auto;
-  margin: 2rem auto;
-}
 
-/* Einheitliches Projektbild */
-
-.plot-image {
-    height: 500px;      /* oder was du willst */
-    width: auto;
-    max-width: 100%;
-    display: block;
-    margin: 0 auto;     /* optional zentrieren */
-}
-
-.profile-image-wrapper {
-  width: 160px;
-  height: 160px;
-  margin: 2rem auto;
-
-  border-radius: 50%;
-  overflow: hidden;
-
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-}
-
-.profile-image-wrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.figure-header {
-  margin-bottom: clamp(0.8rem, 2vw, 1.4rem);
-}
-
-.figure-title {
-  font-size: clamp(1rem, 2.5vw, 1.4rem);
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-}
-
-.figure-meta {
-  font-size: clamp(0.75rem, 2vw, 0.9rem);
-  color: #555;
-  line-height: 1.4;
-}
-
-#legend {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.legend-svg {
-  width: 100%;
-  height: auto;
-}
-
-/* Axis ticks */
-.legend-axis text {
-  font-size: clamp(0.65rem, 1.8vw, 0.8rem);
-}
-
-.legend-axis path,
-.legend-axis line {
-  stroke-width: 1;
-}
-
-/* Main label */
-.legend-label {
-  font-size: clamp(10px, 1.6vw, 12px);
-  fill: #222;
-  dominant-baseline: middle;
-}
-
-/* Caption under legend */
-.legend-caption {
-  font-size: clamp(0.65rem, 1.7vw, 0.8rem);
-  fill: #555;
-}
+/* =========================================================
+   Axes (D3)
+========================================================= */
 
 .axis path,
 .axis line {
@@ -278,4 +146,49 @@ figure {
   .axis-label {
     font-size: 11px;
   }
+}
+
+
+/* =========================================================
+   D3 elements
+========================================================= */
+
+.cell {
+  stroke: none;
+}
+
+.dot {
+  stroke: #333;
+  stroke-width: 0.5;
+}
+
+
+/* =========================================================
+   Legend (Heatmap & Choropleth)
+========================================================= */
+
+#legend {
+  max-width: 600px;
+  margin: 20px auto 0;
+  text-align: center;
+}
+
+.legend-label {
+  font-size: clamp(10px, 1.6vw, 12px);
+  fill: #222;
+  dominant-baseline: middle;
+}
+
+.legend-caption {
+  font-size: clamp(0.65rem, 1.7vw, 0.8rem);
+  fill: #555;
+}
+
+.legend-axis text {
+  font-size: clamp(0.65rem, 1.8vw, 0.8rem);
+}
+
+.legend-axis path,
+.legend-axis line {
+  stroke-width: 1;
 }
