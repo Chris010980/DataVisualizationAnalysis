@@ -220,6 +220,6 @@ figure {
 
 @media (prefers-color-scheme: dark) {
   .colorbar {
-    background-color: #ffffff !important;
+    filter: invert(0);
   }
 }
