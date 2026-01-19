@@ -6,9 +6,9 @@ const isMobile = width < 480;
 
 const margin = {
   top: 40,
-  right: isMobile ? 12 : 30,
+  right: isMobile ? 5 : 30,
   bottom: isMobile ? 50 : 70,
-  left: isMobile ? 45 : 80
+  left: isMobile ? 25 : 80
 };
 
 const legend = {

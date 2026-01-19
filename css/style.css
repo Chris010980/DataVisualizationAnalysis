@@ -28,6 +28,11 @@ h1, h2, h3 {
   box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
 }
 
+@media (max-width: 480px) {
+  .container {
+    padding: 10px;
+  }
+}
 
 /* =========================================================
    Hero / Profile
@@ -97,6 +102,11 @@ figure {
   text-align: center;
 }
 
+@media (max-width: 480px) {
+  .plot {
+    margin: 1.2rem auto;
+  }
+}
 
 /* =========================================================
    Tooltip (D3)
@@ -140,15 +150,11 @@ figure {
 
 @media (max-width: 480px) {
   .axis text {
-    font-size: 9px;
+    font-size: 8px;
   }
 
   .axis-label {
-    font-size: 10px;
-  }
-
-  .plot {
-    margin: 1.2rem auto;
+    font-size: 9px;
   }
 
   #legend {
@@ -204,6 +210,12 @@ figure {
 #legend svg {
   background: var(--legend-bg, #ffffff);
   border-radius: 6px;
+}
+
+@media (max-width: 480px) {
+  #legend {
+    margin-top: 10px;
+  }
 }
 
 /* @media (prefers-color-scheme: dark) {
