@@ -220,6 +220,6 @@ figure {
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --legend-bg: #ffffff;
+    --legend-bg: #ffffff !important;
   }
 }
