@@ -177,8 +177,6 @@ d3.json("../data/temperature.json").then(data => {
       .attr("y", legend.barY)
       .attr("width", legendWidth)
       .attr("height", legend.barHeight)
-      .attr("class", "colorbar")
-      .attr("fill", "#ffffff")
       .attr("fill", "url(#legend-gradient)");
 
     // Axis BELOW the bar with spacing

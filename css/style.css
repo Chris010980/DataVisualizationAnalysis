@@ -217,9 +217,3 @@ figure {
     margin-top: 10px;
   }
 }
-
-@media (prefers-color-scheme: dark) {
-  .colorbar {
-    filter: invert(1);
-  }
-}
