@@ -140,6 +140,7 @@ Promise.all([
     .attr("y", 18)
     .attr("width", legendWidth)
     .attr("height", legendHeight)
+    .attr("class", "colorbar")
     .style("fill", "url(#choropleth-gradient)");
 
   legendSvg.append("g")

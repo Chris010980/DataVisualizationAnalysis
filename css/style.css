@@ -223,3 +223,7 @@ figure {
     --legend-bg: #ffffff !important;
   }
 }
+
+.colorbar {
+  background-color: #ffffff !important;
+}
