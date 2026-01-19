@@ -219,11 +219,7 @@ figure {
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --legend-bg: #ffffff !important;
+  .colorbar {
+    background-color: #ffffff !important;
   }
-}
-
-.colorbar {
-  background-color: #ffffff !important;
 }
