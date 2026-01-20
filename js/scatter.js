@@ -129,7 +129,7 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
     svg.append("text")
       .attr("class", "axis-label axis-label-x")
       .attr("x", margin.left + innerWidth / 2)
-      .attr("y", isMobile ? height - 10 : height - 35)
+      .attr("y", isMobile ? height - 30 : height - 5)
       .attr("text-anchor", "middle")
       .text("Year");
 
