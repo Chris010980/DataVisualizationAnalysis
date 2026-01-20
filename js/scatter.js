@@ -129,7 +129,7 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
     svg.append("text")
       .attr("class", "axis-label axis-label-x")
       .attr("x", margin.left + innerWidth / 2)
-      .attr("y", height - 10)
+      .attr("y", isMobile ? height - 10 : height - 5)
       .attr("text-anchor", "middle")
       .text("Year");
 
@@ -137,7 +137,7 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
       .attr("class", "axis-label axis-label-y")
       .attr("transform", "rotate(-90)")
       .attr("x", -(margin.top + innerHeight / 2))
-      .attr("y", 18)
+      .attr("y", isMobile ? 18 : 5 )
       .attr("text-anchor", "middle")
       .text("Time (minutes)");
 

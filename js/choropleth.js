@@ -10,7 +10,7 @@ const margin = {
   top: 40,
   right: isMobile ? 5 : 20,
   bottom: isMobile ? 20 : 30,
-  left: isMobile ? 5 : 20
+  left: isMobile ? 10 : 20
 };
 const innerWidth  = width  - margin.left - margin.right;
 const innerHeight = height - margin.top  - margin.bottom;
