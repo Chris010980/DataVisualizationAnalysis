@@ -9,7 +9,7 @@ const margin = {
   top: 40,
   right: isMobile ? 10 : 30,
   bottom: 70,
-  left: isMobile ? 60 : 80
+  left: isMobile ? 50 : 80
 };
 
 const innerWidth  = width  - margin.left - margin.right;
@@ -129,7 +129,7 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
     svg.append("text")
       .attr("class", "axis-label axis-label-x")
       .attr("x", margin.left + innerWidth / 2)
-      .attr("y", isMobile ? height - 10 : height - 5)
+      .attr("y", isMobile ? height - 10 : height - 35)
       .attr("text-anchor", "middle")
       .text("Year");
 
