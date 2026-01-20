@@ -8,7 +8,7 @@ const margin = {
   top: 40,
   right: isMobile ? 5 : 30,
   bottom: isMobile ? 50 : 70,
-  left: isMobile ? 50 : 80
+  left: isMobile ? 60 : 80
 };
 
 const legend = {

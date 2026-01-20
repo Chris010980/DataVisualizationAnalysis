@@ -7,9 +7,9 @@ const isMobile = width < 480;
 
 const margin = {
   top: 40,
-  right: isMobile ? 5 : 30,
+  right: isMobile ? 10 : 30,
   bottom: 70,
-  left: isMobile ? 25 : 80
+  left: isMobile ? 60 : 80
 };
 
 const innerWidth  = width  - margin.left - margin.right;
