@@ -137,7 +137,7 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
       .attr("class", "axis-label axis-label-y")
       .attr("transform", "rotate(-90)")
       .attr("x", -(margin.top + innerHeight / 2))
-      .attr("y", isMobile ? 18 : 5 )
+      .attr("y", isMobile ? 5 : 18 )
       .attr("text-anchor", "middle")
       .text("Time (minutes)");
 
