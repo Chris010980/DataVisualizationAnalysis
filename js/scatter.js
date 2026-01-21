@@ -1,9 +1,19 @@
 // ---------- Layout ----------
+const BREAKPOINTS = {
+  mobile: 480,
+  small: 700
+};
+
 const container = d3.select("#scatter");
 const width  = container.node().clientWidth;
-const height = Math.round(width * 0.55);
+const isMobile = width < BREAKPOINTS.mobile;
 
-const isMobile = width < 480;
+const ASPECT_RATIOS = {
+  heatmap: isMobile ? 0.6 : 0.5,
+  scatter: isMobile ? 0.65 : 0.55
+};
+
+const height = Math.round(width * ASPECT_RATIOS.scatter);
 
 const margin = {
   top: 40,
@@ -14,6 +24,21 @@ const margin = {
 
 const innerWidth  = width  - margin.left - margin.right;
 const innerHeight = height - margin.top  - margin.bottom;
+
+const LEGEND_LAYOUT = {
+  mobile: {
+    offsetY: 40,
+    itemSpacingX: 140,
+    itemSpacingY: 0
+  },
+  desktop: {
+    offsetY: 10,
+    itemSpacingX: 0,
+    itemSpacingY: 22
+  }
+};
+
+const layout = isMobile ? LEGEND_LAYOUT.mobile : LEGEND_LAYOUT.desktop;
 
 // ---------- Time helpers ----------
 const parseYear     = d3.timeParse("%Y");
@@ -103,9 +128,18 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
       });
 
     // ---------- Axes ----------
-    const xTicks =
-      innerWidth < 400 ? 4 :
-      innerWidth < 700 ? 6 : 8;
+    function responsiveTicks(size, breakpoints) {
+      for (const [limit, ticks] of breakpoints) {
+        if (size < limit) return ticks;
+      }
+      return breakpoints.at(-1)[1];
+    }
+
+    const xTicks = responsiveTicks(innerWidth, [
+      [400, 4],
+      [700, 6],
+      [Infinity, 8]
+    ]);
 
     const yTicks =
       innerHeight < 300 ? 4 : 6;
@@ -116,14 +150,17 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
       .attr("transform", `translate(0,${innerHeight})`)
       .call(d3.axisBottom(xScale).ticks(xTicks));
 
+    const formatTimeMobile = d3.timeFormat("%M");
+    const formatTimeFull   = d3.timeFormat("%M:%S");
+
+    const yAxis = d3.axisLeft(yScale)
+      .ticks(yTicks)
+      .tickFormat(d => isMobile ? `${formatTimeMobile(d)} min` : formatTimeFull(d));
+
     g.append("g")
       .attr("id", "y-axis")
       .attr("class", "axis axis-y")
-      .call(
-        d3.axisLeft(yScale)
-          .ticks(yTicks)
-          .tickFormat(formatMinSec)
-      );
+      .call(yAxis);
 
     // ---------- Axis labels ----------
     svg.append("text")
@@ -139,7 +176,7 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
       .attr("x", -(margin.top + innerHeight / 2))
       .attr("y", isMobile ? 5 : 18 )
       .attr("text-anchor", "middle")
-      .text("Time (minutes)");
+      .text(isMobile ? "Time (minutes)" : "Time (mm:ss)");
 
       // ---------- Legend ----------
       const legendItems = [
@@ -153,11 +190,11 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
       if (isMobile) {
         // unterhalb des Plots
         legendX = margin.left;
-        legendY = innerHeight + 40;
+        legendY = innerHeight + layout.offsetY;
       } else {
         // inside plot, top-right
         legendX = innerWidth - 160;
-        legendY = 10;
+        legendY = layout.offsetY;
       }
 
       const legend = g.append("g")
@@ -165,15 +202,12 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
         .attr("transform", `translate(${legendX}, ${legendY})`);
 
       // Optional: horizontal layout auf Mobile
-      const itemSpacingX = isMobile ? 140 : 0;
-      const itemSpacingY = isMobile ? 0 : 22;
-
       legend.selectAll("rect")
         .data(legendItems)
         .enter()
         .append("rect")
-        .attr("x", (d, i) => i * itemSpacingX)
-        .attr("y", (d, i) => i * itemSpacingY)
+        .attr("x", (d, i) => i * layout.itemSpacingX)
+        .attr("y", (d, i) => i * layout.itemSpacingY)
         .attr("width", 14)
         .attr("height", 14)
         .attr("fill", d => colorScale(d.value));
@@ -182,8 +216,8 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
         .data(legendItems)
         .enter()
         .append("text")
-        .attr("x", (d, i) => i * itemSpacingX + 22)
-        .attr("y", (d, i) => i * itemSpacingY + 11)
+        .attr("x", (d, i) => i * layout.itemSpacingX + 22)
+        .attr("y", (d, i) => i * layout.itemSpacingY + 11)
         .attr("class", "legend-label")
         .text(d => d.label);
 
