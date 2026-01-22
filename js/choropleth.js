@@ -30,7 +30,7 @@ const svg = d3.select("#choropleth")
 
 const g = svg.append("g")
   .attr("class", "plot")
-  .attr("transform", isMobile ? `translate(-45,20)` : `translate(-85,20)`);
+  .attr("transform", isMobile ? `translate(-42,20)` : `translate(-85,20)`);
 
 // ---------- Description & Legend ----------
 const description = d3.select("#description");
