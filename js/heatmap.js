@@ -8,7 +8,7 @@ const width = container.clientWidth;
 const isMobile = width < BREAKPOINTS.mobile;
 
 const ASPECT_RATIOS = {
-  heatmap: isMobile ? 0.6 : 0.5,
+  heatmap: isMobile ? 0.7 : 0.5,
   scatter: isMobile ? 0.65 : 0.55
 };
 
