@@ -25,12 +25,12 @@ const tooltip = d3.select("#choropleth")
 const svg = d3.select("#choropleth")
   .append("svg")
   .attr("viewBox", `0 0 ${width} ${height}`)
-  .style("width", "113%")
+  .style("width", isMobile ? "118%" : "113%")
   .style("height", "auto");
 
 const g = svg.append("g")
   .attr("class", "plot")
-  .attr("transform", isMobile ? `translate(-20,20)` : `translate(-80,20)`);
+  .attr("transform", isMobile ? `translate(-30,20)` : `translate(-80,20)`);
 
 // ---------- Description & Legend ----------
 const description = d3.select("#description");
