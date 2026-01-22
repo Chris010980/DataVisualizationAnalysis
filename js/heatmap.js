@@ -1,8 +1,18 @@
+const BREAKPOINTS = {
+  mobile: 480,
+  small: 700
+};
+
 const container = document.querySelector("#heatmap");
 const width = container.clientWidth;
-const height = Math.round(width * 0.5);
+const isMobile = width < BREAKPOINTS.mobile;
 
-const isMobile = width < 480;
+const ASPECT_RATIOS = {
+  heatmap: isMobile ? 0.6 : 0.5,
+  scatter: isMobile ? 0.65 : 0.55
+};
+
+const height = Math.round(width * ASPECT_RATIOS.heatmap);
 
 const margin = {
   top: 40,

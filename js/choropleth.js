@@ -7,7 +7,7 @@ const height = Math.round(width * 0.6);
 const isMobile = width < 480;
 
 const margin = {
-  top: 40,
+  top: 20,
   right: isMobile ? 5 : 20,
   bottom: isMobile ? 20 : 30,
   left: isMobile ? 10 : 20
@@ -25,12 +25,12 @@ const tooltip = d3.select("#choropleth")
 const svg = d3.select("#choropleth")
   .append("svg")
   .attr("viewBox", `0 0 ${width} ${height}`)
-  .style("width", "100%")
+  .style("width", "113%")
   .style("height", "auto");
 
 const g = svg.append("g")
   .attr("class", "plot")
-  .attr("transform", `translate(${margin.left},${margin.top})`);
+  .attr("transform", `translate(-80,20)`);
 
 // ---------- Description & Legend ----------
 const description = d3.select("#description");

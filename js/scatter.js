@@ -155,7 +155,7 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
 
     const yAxis = d3.axisLeft(yScale)
       .ticks(yTicks)
-      .tickFormat(d => isMobile ? `${formatTimeMobile(d)} min` : formatTimeFull(d));
+      .tickFormat(d => isMobile ? formatTimeMobile(d) : formatTimeFull(d));
 
     g.append("g")
       .attr("id", "y-axis")
@@ -174,7 +174,7 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
       .attr("class", "axis-label axis-label-y")
       .attr("transform", "rotate(-90)")
       .attr("x", -(margin.top + innerHeight / 2))
-      .attr("y", isMobile ? 5 : 18 )
+      .attr("y", isMobile ? 10 : 18 )
       .attr("text-anchor", "middle")
       .text(isMobile ? "Time (minutes)" : "Time (mm:ss)");
 
