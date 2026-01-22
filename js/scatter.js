@@ -18,8 +18,8 @@ const height = Math.round(width * ASPECT_RATIOS.scatter);
 const margin = {
   top: 40,
   right: isMobile ? 10 : 30,
-  bottom: 70,
-  left: isMobile ? 40 : 80
+  bottom: 80,
+  left: isMobile ? 50 : 80
 };
 
 const innerWidth  = width  - margin.left - margin.right;
@@ -27,7 +27,7 @@ const innerHeight = height - margin.top  - margin.bottom;
 
 const LEGEND_LAYOUT = {
   mobile: {
-    offsetY: 40,
+    offsetY: 50,
     itemSpacingX: 140,
     itemSpacingY: 0
   },
@@ -166,7 +166,7 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
     svg.append("text")
       .attr("class", "axis-label axis-label-x")
       .attr("x", margin.left + innerWidth / 2)
-      .attr("y", isMobile ? height - 40 : height - 5)
+      .attr("y", isMobile ? height - 30 : height - 5)
       .attr("text-anchor", "middle")
       .text("Year");
 
