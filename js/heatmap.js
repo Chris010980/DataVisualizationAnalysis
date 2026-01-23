@@ -47,6 +47,41 @@ const tooltip = d3.select("#tooltip");
 const description = d3.select("#description");
 const legendContainer = d3.select("#legend");
 
+// Wrapper function
+function wrapSvgText(text, width) {
+  text.each(function () {
+    const textSel = d3.select(this);
+    const words = textSel.text().split(/\s+/).reverse();
+    let word;
+    let line = [];
+    let lineNumber = 0;
+    const lineHeight = 1.1; // em
+    const y = textSel.attr("y");
+    const dy = 0;
+
+    let tspan = textSel.text(null)
+      .append("tspan")
+      .attr("x", textSel.attr("x"))
+      .attr("y", y)
+      .attr("dy", dy + "em");
+
+    while (word = words.pop()) {
+      line.push(word);
+      tspan.text(line.join(" "));
+      if (tspan.node().getComputedTextLength() > width) {
+        line.pop();
+        tspan.text(line.join(" "));
+        line = [word];
+        tspan = textSel.append("tspan")
+          .attr("x", textSel.attr("x"))
+          .attr("y", y)
+          .attr("dy", ++lineNumber * lineHeight + dy + "em")
+          .text(word);
+      }
+    }
+  });
+}
+
 // Load data
 d3.json("../data/temperature.json").then(data => {
   const baseTemp = data.baseTemperature;
@@ -205,10 +240,12 @@ d3.json("../data/temperature.json").then(data => {
       .text("Temperature deviation (°C)");
 
     // Label descriptopm
-    legendSvg.append("text")
+    const caption = legendSvg.append("text")
       .attr("x", legendSvgWidth / 2)
       .attr("y", legend.captionY)
       .attr("text-anchor", "middle")
       .attr("class", "legend-caption")
       .text("Blue colors indicate colder-than-average years, red colors warmer-than-average.");
+
+    wrapSvgText(caption, legendSvgWidth - 24);
 });

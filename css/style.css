@@ -252,6 +252,12 @@ figure {
   fill: #555;
 }
 
+@media (max-width: 600px) {
+  .legend-caption {
+    font-size: 0.65rem;          /* kleiner als clamp-Max */
+  }
+}
+
 .legend-axis text {
   font-size: clamp(0.65rem, 1.8vw, 0.8rem);
 }
