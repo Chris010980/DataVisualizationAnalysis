@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="color-scheme" content="light">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Data Visualization & Analysis | Christian Lurz</title>
 
@@ -14,24 +15,25 @@
 </head>
 
 <body>
-
-  <header class="hero">
-    <div>
-    <h1>Data Visualization & Analysis</h1>
-      <p>
-        I design interactive and scientific data visualizations with a strong
-        focus on clarity, correctness, and analytical depth.
-        My work bridges data analysis, visualization, and scientific reasoning.
-      </p>
-    </div>
-    <div>
-      <img
-        src="img/profile.jpg"
-        alt="Christian Lurz"
-        class="profile-pic"
-      />
-    </div>
-  </header>
+  <div class="container">
+    <header class="hero">
+      <div>
+      <h1>Data Visualization & Analysis</h1>
+        <p>
+          I design interactive and scientific data visualizations with a strong
+          focus on clarity, correctness, and analytical depth.
+          My work bridges data analysis, visualization, and scientific reasoning.
+        </p>
+      </div>
+      <div>
+        <img
+          src="img/profile.jpg"
+          alt="Christian Lurz"
+          class="profile-pic"
+        />
+      </div>
+    </header>
+  </div>
 
   <main>
 
@@ -39,69 +41,63 @@
       <h2>Selected Projects</h2>
 
       <h3>Interactive Visualizations (D3.js)</h3>
-      <ul>
-        <li>
+      <ul class="project-list">
+        <li class="project">
           <a href="projects/heatmap.html">
             Global Temperature Anomalies (Heatmap)
           </a>
-          <br />
-          <small>
+          <p>
             Interactive heatmap of monthly global surface temperature deviations since 1753.
-          </small>
+          </p>
         </li>
 
-        <li>
+        <li class="project">
           <a href="projects/choropleth.html">
             Educational Attainment by US County
           </a>
-          <br />
-          <small>
+          <p>
             Choropleth map showing the share of the population holding a bachelor's degree.
-          </small>
+          </p>
         </li>
 
-        <li>
+        <li class="project">
           <a href="projects/scatter.html">
             Tour de France Performance & Doping Allegations
           </a>
-          <br />
-          <small>
+          <p>
             Scatterplot comparing race times with later doping allegations to reveal performance trends.
-          </small>
+          </p>
         </li>
       </ul>
 
       <h3>Scientific & Analytical Visualizations (Python)</h3>
-      <ul>
-        <li>
+      <ul class="project-list">
+        <li class="project">
           <a href="projects/sea-ice.html">
             Arctic Sea Ice Coverage – Hudson Bay
           </a>
-          <br />
-          <small>
+          <p>
             Time series, spatial plots, and polar visualizations illustrating the changing ice season.
-          </small>
+          </p>
         </li>
 
-        <li>
+        <li class="project">
           <a href="projects/helium-potential.html">
             Two-Electron Helium Atom: Effective Potential
           </a>
-          <br />
-          <small>
+          <p>
             2D potential of a helium atom while one electron is moved towards the nucleus.
             Generated from a physics-based model.
-          </small>
+          </p>
         </li>
 
-        <li>
+        <li class="project">
           <a href="projects/population-density.html">
             Population Density on Multiple Geographic Scales
           </a>
-          <br />
-          <small>
+          <p>
             Choropleth-style visualizations of population density for world, of central and western Europe and of Germany.
-          </small>
+          </p>
         </li>
       </ul>
     </section>
@@ -116,7 +112,7 @@
       </p>
 
       <p>
-        I am available for small to medium-sized projects involving data
+        I am available for p to medium-sized projects involving data
         visualization, exploratory data analysis, and the preparation of
         figures for reports, publications, and web applications.
       </p>
