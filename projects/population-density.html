@@ -7,9 +7,17 @@
   <title>Population Density Across Geographic Regions</title>
 
   <meta name="description"
-        content="Population density visualizations for Germany, Bavaria, and the European Union." />
+        content="Population density visualizations and cartographic distortions across different map projections." />
 
   <link rel="stylesheet" href="../css/style.css" />
+
+  <!-- MathJax for equations -->
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" defer></script>
 </head>
 
 <body>
@@ -17,7 +25,7 @@
 <header>
   <h1>Population Density Across Geographic Regions</h1>
   <p>
-    Spatial analysis of population density at different geographic scales.
+    Spatial analysis of population density across different map projections and geographic scales.
   </p>
 </header>
 
@@ -25,61 +33,134 @@
 
 <section class="container">
 
-  <figure class=plot>
+  <figure class="plot">
     <img src="../assets/population/world_density.png"
          alt="Global population density"
          class="plot-image" />
-
     <figcaption class="caption">
-      Global population density highlighting urban–rural contrasts and population centers.
+      Global population density highlighting urban–rural contrasts and major population centers.
     </figcaption>
   </figure>
 
-  <figure class=plot>
+  <figure class="plot">
     <img src="../assets/population/world_density_orthographic.png"
          alt="Global population density in orthographic projection"
          class="plot-image" />
-
     <figcaption class="caption">
-      Global population density in orthographic projection.
+      Global population density shown in an orthographic projection, preserving visual realism at the cost of global completeness.
     </figcaption>
   </figure>
 
-  <figure class=plot>
+  <figure class="plot">
     <img src="../assets/population/world_density_mercator.png"
-         alt="Global population density in mercator projection"
+         alt="Global population density in Mercator projection"
          class="plot-image" />
-
     <figcaption class="caption">
-      Global population density in mercator projection.
+      Global population density in Mercator projection.
     </figcaption>
   </figure>
 
-  <figure class=plot>
+</section>
+
+<!-- ================= Mercator explanation ================= -->
+
+<section class="container text-block">
+
+  <h2>The Mercator Projection and Geometric Distortion</h2>
+
+  <p>
+    Any attempt to represent the Earth — a curved two-dimensional surface embedded in three-dimensional space —
+    on a flat map inevitably introduces distortions. No map projection can preserve distances, angles,
+    and areas simultaneously.
+  </p>
+
+  <p>
+    The Mercator projection is a <em>conformal</em> projection: it preserves local angles and shapes.
+    This property makes it particularly useful for navigation, as rhumb lines (constant compass bearings)
+    appear as straight lines.
+    However, this comes at the cost of severe scale distortions toward the poles.
+  </p>
+
+  <h3>Vertical Stretching (Latitude Direction)</h3>
+
+  <p>
+    In the Mercator projection, geographic latitude $\varphi$ is mapped to a vertical coordinate
+  </p>
+
+  <p>
+    $$ y = R \ln\!\left(\tan\left(\frac{\pi}{4} + \frac{\varphi}{2}\right)\right), $$
+  </p>
+
+  <p>
+    which diverges as $|\varphi| \to 90^\circ$.
+    As a consequence, distances between lines of latitude increase rapidly toward the poles,
+    even though the actual spacing on the globe decreases.
+  </p>
+
+  <h3>Horizontal Stretching (Longitude Direction)</h3>
+
+  <p>
+    Although longitudes are mapped linearly in the horizontal direction, their effective scale
+    increases with latitude. The local horizontal scale factor is
+  </p>
+
+  <p>
+    $$ k(\varphi) = \frac{1}{\cos \varphi}. $$
+  </p>
+
+  <p>
+    This means that regions at higher latitudes are stretched horizontally,
+    even though meridians converge on the sphere.
+  </p>
+
+  <h3>Area Distortion</h3>
+
+  <p>
+    Since both horizontal and vertical scales grow with latitude, the total area distortion factor is
+  </p>
+
+  <p>
+    $$ A(\varphi) = \frac{1}{\cos^2 \varphi}. $$
+  </p>
+
+  <p>
+    At $60^\circ$ latitude, areas are already enlarged by a factor of four compared to the equator.
+    Near the poles, areas are exaggerated without bound.
+  </p>
+
+  <p>
+    This effect famously leads to misinterpretations of relative country sizes —
+    for example, Greenland appears comparable in size to Africa on a Mercator map,
+    despite being more than ten times smaller in reality.
+  </p>
+
+</section>
+
+<section class="container">
+
+  <figure class="plot">
     <img src="../assets/population/Sphere.png"
-         alt="Schematic mercator projection"
+         alt="Schematic Mercator projection"
          class="plot-image" />
-
     <figcaption class="caption">
-      Schematic principle of mercator projection.
+      Schematic illustration of the Mercator projection:
+      a cylindrical projection preserving angles while strongly distorting scale toward the poles.
     </figcaption>
   </figure>
 
-  <figure class=plot>
+  <figure class="plot">
     <img src="../assets/population/eu_density.png"
          alt="Population density in central and western Europe"
          class="plot-image" />
-
     <figcaption class="caption">
-      Population density across central and western Europe on regional scale.
+      Population density across central and western Europe on a regional scale.
     </figcaption>
   </figure>
 
-  <figure class=plot>
+  <figure class="plot">
     <img src="../assets/population/germany_density.png"
          alt="Population density in Germany"
          class="plot-image" />
-
     <figcaption class="caption">
       Population density at municipal level in Germany.
     </figcaption>
@@ -92,14 +173,14 @@
 </section>
 
 </main>
+
 <footer>
   <p>© <span id="year"></span> Christian Lurz</p>
 </footer>
 
-
-
 <script>
   document.getElementById("year").textContent = new Date().getFullYear();
 </script>
+
 </body>
 </html>
