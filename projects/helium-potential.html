@@ -28,7 +28,7 @@
   <figure class=plot>
     <img src="../assets/helium/1D-Pot.png"
          alt="1D slice of effective electron potential"
-         class="responsive-image" />
+         class="plot-image" />
 
     <figcaption class="caption">
       One-dimensional slice of the effective potential experienced by one electron
@@ -50,7 +50,7 @@
   <figure class=plot>
     <img src="../assets/helium/potential_slice.png"
          alt="2D slice of effective electron potential"
-         class="responsive-image" />
+         class="plot-image" />
 
     <figcaption class="caption">
       Two-dimensional slice of the effective potential experienced by one electron
@@ -80,10 +80,34 @@
   <p>© <span id="year"></span> Christian Lurz</p>
 </footer>
 
-
-
 <script>
   document.getElementById("year").textContent = new Date().getFullYear();
 </script>
+
+<div id="lightbox" class="lightbox" aria-hidden="true">
+  <img id="lightbox-img" alt="">
+</div>
+
+<script>
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightbox-img");
+
+  document.querySelectorAll(".plot img").forEach(img => {
+    img.addEventListener("click", () => {
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      lightbox.classList.add("active");
+    });
+  });
+
+  lightbox.addEventListener("click", () => {
+    lightbox.classList.remove("active");
+  });
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") lightbox.classList.remove("active");
+  });
+</script>
+
 </body>
 </html>

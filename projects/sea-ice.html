@@ -27,7 +27,8 @@
 
   <figure class=plot>
     <img src="../assets/ice/hudson_bay_area.png"
-         alt="Hudson Bay Area" />
+         alt="Hudson Bay Area"
+         class="plot-image" />
 
     <figcaption class="caption">
       Geospatial plot of the Hudson Bay Area showing the region of interest.
@@ -36,7 +37,8 @@
 
   <figure class=plot>
     <img src="../assets/ice/hudson_bay_timeseries.png"
-         alt="Time series of sea ice coverage in Hudson Bay" />
+         alt="Time series of sea ice coverage in Hudson Bay"
+         class="plot-image" />
 
     <figcaption class="caption">
       Time series of sea ice coverage showing a systematic reduction of ice extent
@@ -46,7 +48,8 @@
 
   <figure class=plot>
     <img src="../assets/ice/hudson_bay_polar.png"
-         alt="Polar plot of seasonal ice coverage" />
+         alt="Polar plot of seasonal ice coverage"
+         class="plot-image" />
 
     <figcaption class="caption">
       Polar representation of seasonal ice cycles illustrating the extension of
@@ -70,6 +73,30 @@
 
 <script>
   document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+<div id="lightbox" class="lightbox" aria-hidden="true">
+  <img id="lightbox-img" alt="">
+</div>
+
+<script>
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightbox-img");
+
+  document.querySelectorAll(".plot img").forEach(img => {
+    img.addEventListener("click", () => {
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      lightbox.classList.add("active");
+    });
+  });
+
+  lightbox.addEventListener("click", () => {
+    lightbox.classList.remove("active");
+  });
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") lightbox.classList.remove("active");
+  });
 </script>
 </body>
 </html>

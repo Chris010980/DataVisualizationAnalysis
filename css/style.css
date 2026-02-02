@@ -157,6 +157,23 @@ figure {
   height: clamp(200px, 50vw, 500px);
   width: auto;
   max-width: 100%;
+  cursor: zoom-in;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+@media (hover: hover) {
+  .plot img:hover {
+    transform: scale(1.015);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  }
+}
+
+.plot::after {
+  content: "Click to enlarge";
+  display: block;
+  font-size: 0.75rem;
+  color: #888;
+  margin-top: 0.2rem;
 }
 
 .caption,
@@ -282,4 +299,78 @@ figure {
 .caption,
 .legend-caption {
   font-size: 0.85rem;
+}
+
+/* =========================================================
+   Lightbox
+========================================================= */
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 20, 30, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 1000;
+}
+
+.lightbox.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.lightbox img {
+  max-width: 95%;
+  max-height: 90%;
+  border-radius: 10px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+/* =========================================================
+   Info box
+========================================================= */
+
+.info-box {
+  background: linear-gradient(135deg, #f8faff, #ffffff);
+  border-left: 4px solid #1f4fd8;
+}
+
+.info-box h3 {
+  margin-top: 0;
+}
+
+.info-box ul {
+  padding-left: 1.2rem;
+}
+
+.info-box li {
+  margin-bottom: 0.5rem;
+}
+
+.explain {
+  position: relative;
+}
+
+.explanation {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+@media (hover: hover) {
+  .explain:hover .explanation {
+    opacity: 1;
+  }
 }

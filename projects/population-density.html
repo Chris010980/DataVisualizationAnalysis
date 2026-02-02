@@ -58,6 +58,9 @@
     <figcaption class="caption">
       Global population density in Mercator projection.
     </figcaption>
+    <div class="explanation">
+      Area distortion increases with latitude: $A(\varphi) = 1/\cos^2\varphi$
+    </div>
   </figure>
 
 </section>
@@ -136,6 +139,24 @@
 
 </section>
 
+<section class="container info-box">
+
+  <h3>How to Read This Map Correctly</h3>
+
+  <ul>
+    <li>
+      High-latitude regions appear larger than they actually are due to latitude-dependent scaling.
+    </li>
+    <li>
+      Color intensity represents population density per unit area — not total population.
+    </li>
+    <li>
+      Visual comparisons of country size should always be interpreted with projection effects in mind.
+    </li>
+  </ul>
+
+</section>
+
 <section class="container">
 
   <figure class="plot">
@@ -145,24 +166,6 @@
     <figcaption class="caption">
       Schematic illustration of the Mercator projection:
       a cylindrical projection preserving angles while strongly distorting scale toward the poles.
-    </figcaption>
-  </figure>
-
-  <figure class="plot">
-    <img src="../assets/population/eu_density.png"
-         alt="Population density in central and western Europe"
-         class="plot-image" />
-    <figcaption class="caption">
-      Population density across central and western Europe on a regional scale.
-    </figcaption>
-  </figure>
-
-  <figure class="plot">
-    <img src="../assets/population/germany_density.png"
-         alt="Population density in Germany"
-         class="plot-image" />
-    <figcaption class="caption">
-      Population density at municipal level in Germany.
     </figcaption>
   </figure>
 
@@ -180,6 +183,31 @@
 
 <script>
   document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
+<div id="lightbox" class="lightbox" aria-hidden="true">
+  <img id="lightbox-img" alt="">
+</div>
+
+<script>
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightbox-img");
+
+  document.querySelectorAll(".plot img").forEach(img => {
+    img.addEventListener("click", () => {
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      lightbox.classList.add("active");
+    });
+  });
+
+  lightbox.addEventListener("click", () => {
+    lightbox.classList.remove("active");
+  });
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") lightbox.classList.remove("active");
+  });
 </script>
 
 </body>
