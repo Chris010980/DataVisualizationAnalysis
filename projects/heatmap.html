@@ -12,6 +12,9 @@
   <!-- D3 -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
 
+  <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
+
   <!-- Global styles -->
   <link rel="stylesheet" href="../css/style.css" />
 
@@ -54,7 +57,74 @@
       Data source: NOAA / freeCodeCamp.
     </figcaption>
   </section>
+  <section class="container">
+    <h2>Implementation</h2>
 
+    <details class="d3-code-block">
+      <summary>Data Loading & Preprocessing</summary>
+      <pre class="code-content"><code class="language-javascript">
+  // Load data
+  d3.json("../data/temperature.json").then(data => {
+    const baseTemp = data.baseTemperature;
+    const values = data.monthlyVariance;
+
+    const years = [...new Set(values.map(d => d.year))];
+    const months = d3.range(1, 13);
+  });
+      </code></pre>
+    </details>
+
+    <details class="d3-code-block">
+      <summary>Scales & Color Mapping</summary>
+      <pre class="code-content"><code class="language-javascript">
+  const xScale = d3.scaleBand()
+    .domain(years)
+    .range([0, innerWidth]);
+
+  const yScale = d3.scaleBand()
+    .domain(months)
+    .range([0, innerHeight]);
+
+  const colorScale = d3.scaleSequential()
+    .interpolator(d3.interpolateRdYlBu)
+    .domain([zMax, zMin]);
+      </code></pre>
+    </details>
+
+    <details class="d3-code-block">
+      <summary>Heatmap Rendering</summary>
+      <pre class="code-content"><code class="language-javascript">
+  g.selectAll(".cell")
+    .data(values)
+    .enter()
+    .append("rect")
+    .attr("class", "cell")
+    .attr("x", d => xScale(d.year))
+    .attr("y", d => yScale(d.month))
+    .attr("fill", d => colorScale(d.variance));
+      </code></pre>
+    </details>
+
+    <details class="d3-code-block">
+      <summary>Interaction (Tooltip)</summary>
+      <pre class="code-content"><code class="language-javascript">
+  .on("mouseover", (event, d) => {
+    tooltip
+      .style("visibility", "visible")
+      .html(`${d.year} – ${d.variance.toFixed(2)} °C`);
+  })
+  .on("mousemove", event => {
+    tooltip
+      .style("left", `${event.pageX + 15}px`)
+      .style("top", `${event.pageY - 30}px`);
+  })
+  .on("mouseout", () => {
+    tooltip.style("visibility", "hidden");
+  });
+      </code></pre>
+    </details>
+
+  </section>
   <section>
     <h2>About</h2>
     <p>

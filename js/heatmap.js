@@ -106,6 +106,7 @@ d3.json("../data/temperature.json").then(data => {
 
   const colorScale = d3.scaleSequential()
     .interpolator(d3.interpolateRdYlBu)
+    // invert domain: blue = cold, red = warm
     .domain([zMax, zMin]);
 
   // SVG
