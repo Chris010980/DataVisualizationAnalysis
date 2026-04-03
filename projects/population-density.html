@@ -10,7 +10,12 @@
         content="Population density visualizations and cartographic distortions across different map projections." />
 
   <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
   <!-- MathJax for equations -->
   <script>
     MathJax = {
@@ -27,6 +32,12 @@
   <p>
     Spatial analysis of population density across different map projections and geographic scales.
   </p>
+  <p>
+    Source code:
+    <a href="https://github.com/Chris010980/global_population_density" target="_blank">
+      github.com/Chris010980/global_population_density
+    </a>
+  </p>
 </header>
 
 <main>
@@ -42,6 +53,23 @@
     </figcaption>
   </figure>
 
+  <details class="code-block">
+    <summary>Robinson projection (core logic)</summary>
+    <pre><code class="language-python">
+  from src.common import reproject_raster, compute_extent
+
+  data, transform = reproject_raster(src, dst_proj)
+  extent = compute_extent(transform, data)
+
+  ax.imshow(
+      data,
+      extent=extent,
+      cmap=get_cmap_mpl(),
+      norm=get_norm(),
+  )
+    </code></pre>
+  </details>
+
   <figure class="plot">
     <img src="https://raw.githubusercontent.com/Chris010980/global_population_density/master/output/global_population_density_orthographic.png"
          alt="Global population density in orthographic projection"
@@ -50,6 +78,24 @@
       Global population density shown in an orthographic projection, preserving visual realism at the cost of global completeness.
     </figcaption>
   </figure>
+
+  <details class="code-block">
+    <summary>Orthographic projection (Cartopy)</summary>
+    <pre><code class="language-python">
+  proj = ccrs.Orthographic(central_longitude=10, central_latitude=50)
+
+  ax = plt.axes(projection=proj)
+  ax.set_global()
+
+  ax.imshow(
+      data,
+      extent=[-180, 180, -90, 90],
+      transform=ccrs.PlateCarree(),
+      cmap=cmap,
+      norm=norm
+  )
+    </code></pre>
+  </details>
 
   <figure class="plot">
     <img src="https://raw.githubusercontent.com/Chris010980/global_population_density/master/output/global_population_density_mercator.png"
@@ -62,9 +108,76 @@
       Area distortion increases with latitude: $A(\varphi) = 1/\cos^2\varphi$
     </div>
   </figure>
+  <details class="code-block">
+    <summary>Mercator reprojection</summary>
+    <pre><code class="language-python">
+  dst_proj = CRS.from_proj4("+proj=merc +datum=WGS84 +units=m")
+
+  data_merc, transform = reproject_raster(
+      src,
+      dst_proj,
+      resolution=estimate_meter_resolution(src)
+  )
+
+  extent = compute_extent(transform, data_merc)
+    </code></pre>
+  </details>
 
 </section>
+<section class="container text-block">
 
+<h2>Processing Pipeline</h2>
+
+<details class="code-block">
+  <summary>Show pipeline</summary>
+  <pre><code class="language-python">
+def main():
+    check_files()
+
+    generate_orthographic(data_path, output_ortho)
+
+    generate_mercator(
+        data_path,
+        shapefile_path,
+        output_mercator
+    )
+
+    generate_robinson(
+        data_path,
+        shapefile_path,
+        output_robinson
+    )
+  </code></pre>
+</details>
+
+<p>
+The workflow consists of raster preprocessing, reprojection, and consistent rendering
+across multiple map projections.
+</p>
+<details class="code-block">
+  <summary>Shared utilities (reprojection)</summary>
+  <pre><code class="language-python">
+def reproject_raster(src, dst_crs, resolution=None):
+    transform, width, height = calculate_default_transform(
+        src.crs, dst_crs, src.width, src.height, *src.bounds,
+        resolution=resolution
+    )
+
+    data = np.empty((height, width), dtype=np.float32)
+
+    reproject(
+        source=src.read(1),
+        destination=data,
+        src_transform=src.transform,
+        src_crs=src.crs,
+        dst_transform=transform,
+        dst_crs=dst_crs,
+    )
+
+    return data, transform
+  </code></pre>
+</details>
+</section>
 <!-- ================= Mercator explanation ================= -->
 
 <section class="container text-block">
