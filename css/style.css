@@ -500,3 +500,27 @@ figure {
     opacity: 1;
   }
 }
+
+/* =========================================================
+   Prism Fix (override base code styling)
+========================================================= */
+
+.d3-code-block code[class*="language-"] {
+  color: inherit;               /* kein globales Weiß */
+  background: none;
+  text-shadow: none;
+}
+
+.d3-code-block pre[class*="language-"],
+.d3-code-block code[class*="language-"] {
+  font-family: "Fira Code", monospace;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+.d3-code-block pre[class*="language-"] {
+  background: #f5f9fb !important;
+}
+
+.d3-code-block .token {
+  text-shadow: none !important;
+}

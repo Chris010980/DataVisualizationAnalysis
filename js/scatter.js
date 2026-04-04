@@ -1,3 +1,4 @@
+// --- CONFIG START ---
 // ---------- Layout ----------
 const BREAKPOINTS = {
   mobile: 480,
@@ -39,7 +40,9 @@ const LEGEND_LAYOUT = {
 };
 
 const layout = isMobile ? LEGEND_LAYOUT.mobile : LEGEND_LAYOUT.desktop;
+// --- CONFIG END ---
 
+// --- HELPERS START ---
 // ---------- Time helpers ----------
 const parseYear     = d3.timeParse("%Y");
 const parseSeconds  = d3.timeParse("%s");
@@ -48,6 +51,7 @@ const formatMinSec  = d3.timeFormat("%M:%S");
 
 // ---------- Tooltip ----------
 const tooltip = d3.select("#tooltip");
+// --- HELPERS END ---
 
 // ---------- SVG ----------
 const svg = container.append("svg")
@@ -59,10 +63,11 @@ const g = svg.append("g")
   .attr("class", "plot")
   .attr("transform", `translate(${margin.left},${margin.top})`);
 
+// --- DATA START ---
 // ---------- Load data ----------
 d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json")
   .then(data => {
-
+// --- DATA END ---
     // ---------- Data preparation ----------
     data.forEach(d => {
       d.YearParsed = parseYear(d.Year);
@@ -83,6 +88,7 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
       d3.timeSecond.offset(yExtent[0], -15)
     ];
 
+    // --- SCALES START ---
     // ---------- Scales ----------
     const xScale = d3.scaleTime()
       .domain(xDomain)
@@ -95,12 +101,15 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
     const colorScale = d3.scaleOrdinal()
       .domain([true, false])
       .range(["#4575b4", "#fdae61"]);
+    // --- SCALES END ---
 
+    // --- RENDER START ---
     // ---------- Points ----------
     g.selectAll(".dot")
       .data(data)
       .enter()
       .append("circle")
+    // --- RENDER END ---
       .attr("class", "dot")
       .attr("cx", d => xScale(d.YearParsed))
       .attr("cy", d => yScale(d.TimeParsed))
@@ -108,6 +117,7 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
       .attr("fill", d => colorScale(d.HasDoping))
       .attr("data-xvalue", d => d.YearParsed)
       .attr("data-yvalue", d => d.TimeParsed)
+      // --- INTERACTION START ---
       .on("mouseover", (event, d) => {
         tooltip
           .style("visibility", "visible")
@@ -126,7 +136,8 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
       .on("mouseout", () => {
         tooltip.style("visibility", "hidden");
       });
-
+      // --- INTERACTION END ---
+      
     // ---------- Axes ----------
     function responsiveTicks(size, breakpoints) {
       for (const [limit, ticks] of breakpoints) {
@@ -144,6 +155,7 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
     const yTicks =
       innerHeight < 300 ? 4 : 6;
 
+    // --- AXES START ---
     g.append("g")
       .attr("id", "x-axis")
       .attr("class", "axis axis-x")
@@ -161,6 +173,7 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
       .attr("id", "y-axis")
       .attr("class", "axis axis-y")
       .call(yAxis);
+    // --- AXES END ---
 
     // ---------- Axis labels ----------
     svg.append("text")
@@ -197,9 +210,11 @@ d3.json("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/mas
         legendY = layout.offsetY;
       }
 
+      // --- LEGEND START ---
       const legend = g.append("g")
         .attr("class", "legend")
         .attr("transform", `translate(${legendX}, ${legendY})`);
+      // --- LEGEND END ---
 
       // Optional: horizontal layout auf Mobile
       legend.selectAll("rect")

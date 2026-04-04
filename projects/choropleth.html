@@ -12,7 +12,8 @@
   />
 
   <link rel="stylesheet" href="../css/style.css" />
-
+  <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
   <!-- D3 -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
@@ -46,7 +47,40 @@
         degree or higher.
       </figcaption>
     </section>
+    <section class="container">
+      <h2>Implementation</h2>
 
+      <details class="d3-code-block" data-block="data">
+        <summary>Data Loading</summary>
+        <pre><code id="code-data" class="language-javascript"></code></pre>
+      </details>
+
+      <details class="d3-code-block" data-block="geo">
+        <summary>Geo Processing</summary>
+        <pre><code id="code-geo" class="language-javascript"></code></pre>
+      </details>
+
+      <details class="d3-code-block" data-block="scale">
+        <summary>Color Scale</summary>
+        <pre><code id="code-scale" class="language-javascript"></code></pre>
+      </details>
+
+      <details class="d3-code-block" data-block="render">
+        <summary>Map Rendering</summary>
+        <pre><code id="code-render" class="language-javascript"></code></pre>
+      </details>
+
+      <details class="d3-code-block" data-block="interaction">
+        <summary>Interaction</summary>
+        <pre><code id="code-interaction" class="language-javascript"></code></pre>
+      </details>
+
+      <details class="d3-code-block" data-block="legend">
+        <summary>Legend</summary>
+        <pre><code id="code-legend" class="language-javascript"></code></pre>
+      </details>
+
+    </section>
     <section>
       <p>
         <a href="../index.html">← Back to overview</a>
@@ -63,8 +97,18 @@
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
+  <script>
+    window.blockMap = {
+      data: ["code-data", "// --- DATA START ---", "// --- DATA END ---"],
+      geo: ["code-geo", "// --- GEO START ---", "// --- GEO END ---"],
+      scale: ["code-scale", "// --- SCALE START ---", "// --- SCALE END ---"],
+      render: ["code-render", "// --- RENDER START ---", "// --- RENDER END ---"],
+      interaction: ["code-interaction", "// --- INTERACTION START ---", "// --- INTERACTION END ---"],
+      legend: ["code-legend", "// --- LEGEND START ---", "// --- LEGEND END ---"]
+    };
+  </script>
   <script src="../js/choropleth.js"></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js'></script>
-
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js'></script>
+  <script src="../js/code-loader.js"></script>
 </body>
 </html>

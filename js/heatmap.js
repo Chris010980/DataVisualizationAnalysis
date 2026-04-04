@@ -1,3 +1,4 @@
+// --- CONFIG START ---
 const BREAKPOINTS = {
   mobile: 480,
   small: 700
@@ -33,7 +34,10 @@ const legend = {
 
 const innerWidth  = width  - margin.left - margin.right;
 const innerHeight = height - margin.top  - margin.bottom;
+// --- CONFIG END ---
 
+
+// --- HELPERS START ---
 // Time helpers
 const parseYear = d3.timeParse("%Y");
 const parseMonth = d3.timeParse("%m");
@@ -55,15 +59,14 @@ function wrapSvgText(text, width) {
     let word;
     let line = [];
     let lineNumber = 0;
-    const lineHeight = 1.1; // em
-    const y = textSel.attr("y");
-    const dy = 0;
+    const lineHeight = 1.1;
 
+    const y = textSel.attr("y");
     let tspan = textSel.text(null)
       .append("tspan")
       .attr("x", textSel.attr("x"))
       .attr("y", y)
-      .attr("dy", dy + "em");
+      .attr("dy", "0em");
 
     while (word = words.pop()) {
       line.push(word);
@@ -75,14 +78,16 @@ function wrapSvgText(text, width) {
         tspan = textSel.append("tspan")
           .attr("x", textSel.attr("x"))
           .attr("y", y)
-          .attr("dy", ++lineNumber * lineHeight + dy + "em")
+          .attr("dy", ++lineNumber * lineHeight + "em")
           .text(word);
       }
     }
   });
 }
+// --- HELPERS END ---
 
-// Load data
+
+// --- DATA START ---
 d3.json("../data/temperature.json").then(data => {
   const baseTemp = data.baseTemperature;
   const values = data.monthlyVariance;
@@ -92,8 +97,10 @@ d3.json("../data/temperature.json").then(data => {
 
   const zMin = d3.min(values, d => d.variance);
   const zMax = d3.max(values, d => d.variance);
+// --- DATA END ---
 
-  // Scales
+
+// --- SCALES START ---
   const xScale = d3.scaleBand()
     .domain(years)
     .range([0, innerWidth])
@@ -104,12 +111,14 @@ d3.json("../data/temperature.json").then(data => {
     .range([0, innerHeight])
     .padding(0);
 
+  // invert domain: blue = cold, red = warm
   const colorScale = d3.scaleSequential()
     .interpolator(d3.interpolateRdYlBu)
-    // invert domain: blue = cold, red = warm
     .domain([zMax, zMin]);
+// --- SCALES END ---
 
-  // SVG
+
+// --- SVG START ---
   const svg = d3.select("#heatmap")
     .append("svg")
     .attr("viewBox", `0 0 ${width} ${height}`)
@@ -120,7 +129,6 @@ d3.json("../data/temperature.json").then(data => {
     .attr("class", "plot")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-  // Description
   description.html(`
     <h3 class="figure-title">Global Temperature Variance</h3>
     <p class="figure-meta">
@@ -128,8 +136,10 @@ d3.json("../data/temperature.json").then(data => {
       Base temperature: ${baseTemp} °C
     </p>
   `);
+// --- SVG END ---
 
-  // Heatmap cells
+
+// --- RENDER START ---
   g.selectAll(".cell")
     .data(values)
     .enter()
@@ -142,7 +152,12 @@ d3.json("../data/temperature.json").then(data => {
     .attr("fill", d => colorScale(d.variance))
     .attr("data-year", d => d.year)
     .attr("data-month", d => d.month - 1)
-    .attr("data-temp", d => d.variance)
+    .attr("data-temp", d => d.variance);
+// --- RENDER END ---
+
+
+// --- INTERACTION START ---
+  g.selectAll(".cell")
     .on("mouseover", (event, d) => {
       tooltip
         .style("visibility", "visible")
@@ -159,8 +174,10 @@ d3.json("../data/temperature.json").then(data => {
     .on("mouseout", () => {
       tooltip.style("visibility", "hidden");
     });
+// --- INTERACTION END ---
 
-  // X axis
+
+// --- AXES START ---
   const xTickStep =
     innerWidth < 500 ? 50 :
     innerWidth < 800 ? 30 :
@@ -181,7 +198,6 @@ d3.json("../data/temperature.json").then(data => {
     .attr("y", height - 6)
     .text("Year");
 
-  // Y axis
   const yAxis = d3.axisLeft(yScale)
     .tickFormat(d =>
       width < 500
@@ -189,64 +205,64 @@ d3.json("../data/temperature.json").then(data => {
         : formatMonth(parseMonth(d))
     );
 
-    g.append("g")
-      .attr("class", "axis axis-y")
-      .call(yAxis);
+  g.append("g")
+    .attr("class", "axis axis-y")
+    .call(yAxis);
+// --- AXES END ---
 
-    // -------- Legend --------
-    const legendWidth = Math.min(300, width * 0.6);
-    const legendSvgWidth = legendWidth + 2 * legend.sidePadding;
 
-    const legendScale = d3.scaleLinear()
-      .domain([zMin, zMax])
-      .range([0, legendWidth]);
+// --- LEGEND START ---
+  const legendWidth = Math.min(300, width * 0.6);
+  const legendSvgWidth = legendWidth + 2 * legend.sidePadding;
 
-    const legendSvg = legendContainer.append("svg")
-      .attr("viewBox", `0 0 ${legendSvgWidth} 120`)
-      .style("width", "100%")
-      .style("height", "auto");
+  const legendScale = d3.scaleLinear()
+    .domain([zMin, zMax])
+    .range([0, legendWidth]);
 
-    const legendGradient = legendSvg
-      .append("defs")
-      .append("linearGradient")
-      .attr("id", "legend-gradient");
+  const legendSvg = legendContainer.append("svg")
+    .attr("viewBox", `0 0 ${legendSvgWidth} 120`)
+    .style("width", "100%")
+    .style("height", "auto");
 
-    d3.range(0, 1.01, 0.01).forEach(t => {
-      legendGradient.append("stop")
-        .attr("offset", `${t * 100}%`)
-        .attr("stop-color", colorScale(zMin + t * (zMax - zMin)));
-    });
+  const legendGradient = legendSvg
+    .append("defs")
+    .append("linearGradient")
+    .attr("id", "legend-gradient");
 
-    // Gradient bar
-    legendSvg.append("rect")
-      .attr("x", legend.barX)
-      .attr("y", legend.barY)
-      .attr("width", legendWidth)
-      .attr("height", legend.barHeight)
-      .attr("fill", "url(#legend-gradient)");
+  d3.range(0, 1.01, 0.01).forEach(t => {
+    legendGradient.append("stop")
+      .attr("offset", `${t * 100}%`)
+      .attr("stop-color", colorScale(zMin + t * (zMax - zMin)));
+  });
 
-    // Axis BELOW the bar with spacing
-    legendSvg.append("g")
-      .attr("transform",
-        `translate(${legend.barX},${legend.barY + legend.barHeight + legend.axisOffset})`
-      )
-      .call(d3.axisBottom(legendScale).ticks(5));
+  legendSvg.append("rect")
+    .attr("x", legend.barX)
+    .attr("y", legend.barY)
+    .attr("width", legendWidth)
+    .attr("height", legend.barHeight)
+    .attr("fill", "url(#legend-gradient)");
 
-    // Label with generous spacing
-    legendSvg.append("text")
-      .attr("x", legendSvgWidth / 2)
-      .attr("y", legend.labelY)
-      .attr("text-anchor", "middle")
-      .attr("class", "legend-label")
-      .text("Temperature deviation (°C)");
+  legendSvg.append("g")
+    .attr("transform",
+      `translate(${legend.barX},${legend.barY + legend.barHeight + legend.axisOffset})`
+    )
+    .call(d3.axisBottom(legendScale).ticks(5));
 
-    // Label descriptopm
-    const caption = legendSvg.append("text")
-      .attr("x", legendSvgWidth / 2)
-      .attr("y", legend.captionY)
-      .attr("text-anchor", "middle")
-      .attr("class", "legend-caption")
-      .text("Blue colors indicate colder-than-average years, red colors warmer-than-average.");
+  legendSvg.append("text")
+    .attr("x", legendSvgWidth / 2)
+    .attr("y", legend.labelY)
+    .attr("text-anchor", "middle")
+    .attr("class", "legend-label")
+    .text("Temperature deviation (°C)");
 
-    wrapSvgText(caption, legendSvgWidth - 24);
+  const caption = legendSvg.append("text")
+    .attr("x", legendSvgWidth / 2)
+    .attr("y", legend.captionY)
+    .attr("text-anchor", "middle")
+    .attr("class", "legend-caption")
+    .text("Blue = colder, red = warmer");
+
+  wrapSvgText(caption, legendSvgWidth - 24);
+// --- LEGEND END ---
+
 });

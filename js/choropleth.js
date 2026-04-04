@@ -1,4 +1,4 @@
-
+// --- CONFIG START ---
 // ---------- Layout ----------
 const container = document.querySelector("#choropleth");
 const width  = container.clientWidth;
@@ -14,6 +14,9 @@ const margin = {
 };
 const innerWidth  = width  - margin.left - margin.right;
 const innerHeight = height - margin.top  - margin.bottom;
+// --- CONFIG END ---
+
+// --- HELPERS START ---
 
 // ---------- Tooltip ----------
 const tooltip = d3.select("#choropleth")
@@ -39,7 +42,10 @@ const legendContainer = d3.select("#legend");
 // ---------- Projection ----------
 const projection = d3.geoIdentity();
 const path = d3.geoPath(projection);
+// --- HELPERS END ---
 
+
+// --- DATA START ---
 // ---------- Data ----------
 Promise.all([
   d3.json("https://cdn.freecodecamp.org/testable-projects-fcc/data/choropleth_map/for_user_education.json"),
@@ -52,16 +58,22 @@ Promise.all([
 
   const minEdu = d3.min(education, d => d.bachelorsOrHigher);
   const maxEdu = d3.max(education, d => d.bachelorsOrHigher);
+  // --- DATA END ---
 
+  // --- SCALE START ---
   // ---------- Color Scale ----------
   const colorScale = d3.scaleSequential()
     .domain([minEdu, maxEdu])
     .interpolator(d3.interpolateGreens);
+  // --- SCALE END ---
 
+  // --- GEO START ---
   // ---------- Geo ----------
   const geojson = topojson.feature(counties, counties.objects.counties);
   projection.fitSize([innerWidth, innerHeight], geojson);
+  // --- GEO END ---
 
+  // --- RENDER START ---
   // ---------- Map ----------
   g.append("g")
     .selectAll("path")
@@ -81,6 +93,9 @@ Promise.all([
       const edu = educationByFips.get(d.id);
       return edu ? edu.bachelorsOrHigher : 0;
     })
+    // --- RENDER END ---
+
+    // --- INTERACTION START ---
     .on("mouseover", (event, d) => {
       const edu = educationByFips.get(d.id);
       if (!edu) return;
@@ -100,6 +115,8 @@ Promise.all([
     .on("mouseout", () => {
       tooltip.style("visibility", "hidden");
     });
+    // --- INTERACTION END ---
+
 
   // ---------- Description ----------
   description.html(`
@@ -118,11 +135,14 @@ Promise.all([
     .domain([minEdu, maxEdu])
     .range([0, legendWidth]);
 
+  // --- LEGEND START ---
+
   const legendSvg = legendContainer
     .append("svg")
     .attr("viewBox", `0 0 ${legendWidth + 160} 110`)
     .style("width", "100%")
     .style("height", "auto");
+  // --- LEGEND END ---
 
   // Gradient
   const gradient = legendSvg.append("defs")

@@ -12,7 +12,8 @@
   />
 
   <link rel="stylesheet" href="../css/style.css" />
-
+  <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
   <!-- D3 -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
@@ -47,7 +48,35 @@
       </figcaption>
 
     </section>
+    <section class="container">
+      <h2>Implementation</h2>
 
+      <details class="d3-code-block" data-block="data">
+        <summary>Data Preparation</summary>
+        <pre><code id="code-data" class="language-javascript"></code></pre>
+      </details>
+
+      <details class="d3-code-block" data-block="scales">
+        <summary>Scales & Encoding</summary>
+        <pre><code id="code-scales" class="language-javascript"></code></pre>
+      </details>
+
+      <details class="d3-code-block" data-block="render">
+        <summary>Point Rendering</summary>
+        <pre><code id="code-render" class="language-javascript"></code></pre>
+      </details>
+
+      <details class="d3-code-block" data-block="interaction">
+        <summary>Interaction (Tooltip)</summary>
+        <pre><code id="code-interaction" class="language-javascript"></code></pre>
+      </details>
+
+      <details class="d3-code-block" data-block="axes">
+        <summary>Axes</summary>
+        <pre><code id="code-axes" class="language-javascript"></code></pre>
+      </details>
+
+    </section>
     <section>
       <p>
         <a href="../index.html">← Back to overview</a>
@@ -60,11 +89,20 @@
   </footer>
 
 
-
+  <script>
+    window.blockMap = {
+      data: ["code-data", "// --- DATA START ---", "// --- DATA END ---"],
+      scales: ["code-scales", "// --- SCALES START ---", "// --- SCALES END ---"],
+      render: ["code-render", "// --- RENDER START ---", "// --- RENDER END ---"],
+      interaction: ["code-interaction", "// --- INTERACTION START ---", "// --- INTERACTION END ---"],
+      axes: ["code-axes", "// --- AXES START ---", "// --- AXES END ---"]
+    };
+  </script>
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
   <script src="../js/scatter.js"></script>
+  <script src="../js/code-loader.js"></script>
 
 </body>
 </html>

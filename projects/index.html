@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="color-scheme" content="light">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Visualization & Analysis | Christian Lurz</title>
+
+  <meta
+    name="description"
+    content="Scientific data visualization and analysis using D3.js and Python. Interactive graphics, analytical plots, and publication-quality figures."
+  />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+  <div class="container">
+    <header class="hero">
+      <div>
+      <h1>Data Visualization & Analysis</h1>
+        <p>
+          I design interactive and scientific data visualizations with a strong
+          focus on clarity, correctness, and analytical depth.
+          My work bridges data analysis, visualization, and scientific reasoning.
+        </p>
+      </div>
+      <div>
+        <img
+          src="img/profile.jpg"
+          alt="Christian Lurz"
+          class="profile-pic"
+        />
+      </div>
+    </header>
+  </div>
+
+  <main>
+
+    <section>
+      <h2>Selected Projects</h2>
+
+      <h3>Interactive Visualizations (D3.js)</h3>
+      <ul class="project-list">
+        <li class="project">
+          <a href="projects/heatmap.html">
+            Global Temperature Anomalies (Heatmap)
+          </a>
+          <p>
+            Interactive heatmap of monthly global surface temperature deviations since 1753.
+          </p>
+        </li>
+
+        <li class="project">
+          <a href="projects/choropleth.html">
+            Educational Attainment by US County
+          </a>
+          <p>
+            Choropleth map showing the share of the population holding a bachelor's degree.
+          </p>
+        </li>
+
+        <li class="project">
+          <a href="projects/scatter.html">
+            Tour de France Performance & Doping Allegations
+          </a>
+          <p>
+            Scatterplot comparing race times with later doping allegations to reveal performance trends.
+          </p>
+        </li>
+      </ul>
+
+      <h3>Scientific & Analytical Visualizations (Python)</h3>
+      <ul class="project-list">
+        <li class="project">
+          <a href="projects/sea-ice.html">
+            Arctic Sea Ice Coverage – Hudson Bay
+          </a>
+          <p>
+            Time series, spatial plots, and polar visualizations illustrating the changing ice season.
+          </p>
+        </li>
+
+        <li class="project">
+          <a href="projects/helium-potential.html">
+            Two-Electron Helium Atom: Effective Potential
+          </a>
+          <p>
+            2D potential of a helium atom while one electron is moved towards the nucleus.
+            Generated from a physics-based model.
+          </p>
+        </li>
+
+        <li class="project">
+          <a href="projects/population-density.html">
+            Population Density on Multiple Geographic Scales
+          </a>
+          <p>
+            Choropleth-style visualizations of population density for world, of central and western Europe and of Germany.
+          </p>
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>About Me</h2>
+      <p>
+        I have a strong background in scientific computing, data analysis, and
+        quantitative modeling. My work emphasizes transparent data processing,
+        reproducibility, and visualizations that support insight rather than
+        decoration.
+      </p>
+
+      <p>
+        I am available for p to medium-sized projects involving data
+        visualization, exploratory data analysis, and the preparation of
+        figures for reports, publications, and web applications.
+      </p>
+    </section>
+
+    <section>
+      <h2>Tools & Focus</h2>
+      <ul>
+        <li>D3.js (interactive, web-based visualizations)</li>
+        <li>Python (NumPy, SciPy, Matplotlib, data processing)</li>
+        <li>Scientific and technical plotting</li>
+        <li>Data analysis & transformation</li>
+        <li>Reproducible and publication-ready figures</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Contact</h2>
+      <p>
+        If you are interested in collaborating or have a concrete project in
+        mind, feel free to get in touch:
+      </p>
+
+      <p>
+        <strong>Email:</strong>
+        <a href="mailto:chris.lurz@gmx.de">chris.lurz@gmx.de</a>
+      </p>
+
+      <p>
+        <strong>GitHub:</strong>
+        <a href="https://github.com/chris010980" target="_blank" rel="noopener">
+          github.com/chris010980
+        </a>
+      </p>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>
+      © <span id="year"></span> Christian Lurz
+    </p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
