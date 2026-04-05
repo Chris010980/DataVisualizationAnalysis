@@ -1,37 +1,75 @@
-async function loadCodeBlock(id, file, startMarker, endMarker) {
+async function loadFile(file) {
   const res = await fetch(file);
-  const text = await res.text();
+  if (!res.ok) throw new Error(`Failed to load ${file}`);
+  return await res.text();
+}
 
-  const start = text.indexOf(startMarker);
-  const end = text.indexOf(endMarker);
 
-  if (start === -1 || end === -1) {
-    console.warn("Marker not found:", startMarker, endMarker);
+// Extract ALL blocks at once
+function extractBlocks(text) {
+  const regex = /\/\/ --- (\w+) START ---([\s\S]*?)\/\/ --- \1 END ---/g;
+
+  const blocks = {};
+  let match;
+
+  while ((match = regex.exec(text)) !== null) {
+    const key = match[1].toLowerCase();
+    const content = match[2].trim();
+    blocks[key] = content;
+  }
+
+  return blocks;
+}
+
+
+// Main init
+async function initCodeBlocks() {
+  const elements = document.querySelectorAll(".d3-code-block");
+
+  if (!elements.length) return;
+
+  // Alle benutzen dieselbe Datei → aus erstem Element lesen
+  const file = elements[0].dataset.file;
+
+  let codeText;
+  try {
+    codeText = await loadFile(file);
+  } catch (err) {
+    console.error(err);
     return;
   }
 
-  const snippet = text.substring(start + startMarker.length, end).trim();
-  document.getElementById(id).textContent = snippet;
-  const el = document.getElementById(id);
-  el.textContent = snippet;
+  const blocks = extractBlocks(codeText);
 
-  if (window.Prism) {
-    Prism.highlightElement(el);
-  }
+  elements.forEach(el => {
+    const key = el.dataset.block?.toLowerCase();
+    const codeEl = el.querySelector("code");
+
+    if (!key || !codeEl) return;
+
+    let loaded = false;
+
+    el.addEventListener("toggle", () => {
+      if (!el.open || loaded) return;
+
+      const snippet = blocks[key];
+
+      if (!snippet) {
+        console.warn(`No block found for: ${key}`);
+        return;
+      }
+
+      codeEl.textContent = snippet;
+
+      if (window.Prism) {
+        Prism.highlightElement(codeEl);
+      }
+
+      loaded = true;
+    });
+  });
 }
 
-const blockMap = window.blockMap;
 
-document.querySelectorAll(".d3-code-block").forEach(block => {
-  let loaded = false;
-
-  block.addEventListener("toggle", () => {
-    if (block.open && !loaded) {
-      const key = block.dataset.block;
-      const [id, start, end] = blockMap[key];
-
-      loadCodeBlock(id, "../js/heatmap.js", start, end);
-      loaded = true;
-    }
-  });
-});
+// Init nach DOM ready
+document.addEventListener("DOMContentLoaded", initCodeBlocks);

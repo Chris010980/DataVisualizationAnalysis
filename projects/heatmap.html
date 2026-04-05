@@ -60,22 +60,22 @@
   <section class="container">
     <h2>Implementation</h2>
 
-    <details class="d3-code-block" data-block="data">
+    <details class="d3-code-block" data-block="data" data-file="../js/heatmap.js">
       <summary>Data Loading & Preprocessing</summary>
       <pre><code id="code-data" class="language-javascript"></code></pre>
     </details>
 
-    <details class="d3-code-block" data-block="scales">
+    <details class="d3-code-block" data-block="scales" data-file="../js/heatmap.js">
       <summary>Scales & Color Mapping</summary>
       <pre><code id="code-scales" class="language-javascript"></code></pre>
     </details>
 
-    <details class="d3-code-block" data-block="render">
+    <details class="d3-code-block" data-block="render" data-file="../js/heatmap.js">
       <summary>Heatmap Rendering</summary>
       <pre><code id="code-render" class="language-javascript"></code></pre>
     </details>
 
-    <details class="d3-code-block" data-block="interaction">
+    <details class="d3-code-block" data-block="interaction" data-file="../js/heatmap.js">
       <summary>Interaction (Tooltip)</summary>
       <pre><code id="code-interaction" class="language-javascript"></code></pre>
     </details>
@@ -111,14 +111,6 @@
 
 <script>
   document.getElementById("year").textContent = new Date().getFullYear();
-</script>
-<script>
-  window.blockMap = {
-   data: ["code-data", "// --- DATA START ---", "// --- DATA END ---"],
-   scales: ["code-scales", "// --- SCALES START ---", "// --- SCALES END ---"],
-   render: ["code-render", "// --- RENDER START ---", "// --- RENDER END ---"],
-   interaction: ["code-interaction", "// --- INTERACTION START ---", "// --- INTERACTION END ---"]
-  };
 </script>
 
 
