@@ -52,7 +52,7 @@
          alt="2D slice of effective electron potential"
          class="plot-image" />
 
-        
+
 
     <figcaption class="caption">
       Two-dimensional slice of the effective potential experienced by one electron
@@ -73,6 +73,90 @@
 
 </section>
 
+<section class="container info-box">
+  <h2>Physical Model</h2>
+
+  <p>
+    The helium atom represents the simplest multi-electron system where
+    electron–electron interactions cannot be neglected. Unlike hydrogen,
+    the Schrödinger equation is no longer analytically separable due to
+    the Coulomb repulsion between the two electrons.
+  </p>
+
+  <p>
+    In this project, we visualize an <strong>effective one-electron potential</strong>
+    obtained by fixing the position of the second electron. The resulting
+    potential is given by:
+  </p>
+
+  <p>
+    V(r) = -Z / r + 1 / |r - r₂|
+  </p>
+
+  <p>
+    This simplified model allows us to isolate and study the structure of
+    electron–electron interaction in real space.
+  </p>
+</section>
+<section class="container">
+  <h2>Interpretation</h2>
+
+  <p>
+    The visualizations illustrate how the presence of a second electron
+    modifies the effective potential experienced by the first electron.
+  </p>
+
+  <ul>
+    <li>
+      At large distances, the second electron has little influence and the
+      potential approaches the pure Coulomb potential.
+    </li>
+    <li>
+      As the second electron moves closer to the nucleus, the potential
+      becomes increasingly distorted due to electron–electron repulsion.
+    </li>
+    <li>
+      This effect can be interpreted as <strong>screening</strong>, where the
+      nuclear charge is partially reduced by the presence of the second electron.
+    </li>
+  </ul>
+
+  <p>
+    The 2D plots further highlight the anisotropy introduced by fixing the
+    second electron at a specific position.
+  </p>
+</section>
+<section class="container">
+  <h2>Why This Matters</h2>
+
+  <p>
+    Understanding electron–electron interaction is essential for describing
+    real atomic systems. Even in helium, these interactions lead to measurable
+    deviations from simple hydrogen-like behavior.
+  </p>
+
+  <p>
+    This visualization serves as a foundation for more advanced approaches,
+    including:
+  </p>
+
+  <ul>
+    <li>Numerical investigation of the electron–electron cusp condition</li>
+    <li>Hylleraas-type wavefunctions with explicit correlation terms</li>
+    <li>Variational approaches to the helium ground state</li>
+  </ul>
+</section>
+<section class="container">
+  <h2>Methodology</h2>
+
+  <ul>
+    <li>Construction of a 2D spatial grid</li>
+    <li>Evaluation of Coulomb interaction terms</li>
+    <li>Parametric variation of electron position</li>
+    <li>Visualization using Matplotlib (1D and 2D slices)</li>
+    <li>Animation via frame generation and video encoding</li>
+  </ul>
+</section>
 <section>
   <p><a href="../index.html">← Back to overview</a></p>
 </section>
