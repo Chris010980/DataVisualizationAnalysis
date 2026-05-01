@@ -7,7 +7,7 @@
   <title>Arctic Sea Ice Coverage – Hudson Bay</title>
 
   <meta name="description"
-        content="Analysis of seasonal and long-term changes in sea ice coverage in the Hudson Bay area." />
+        content="Geospatial analysis of seasonal and long-term changes in Arctic sea ice coverage using satellite data." />
 
   <link rel="stylesheet" href="../css/style.css" />
 </head>
@@ -15,48 +15,149 @@
 <body>
 
 <header>
-  <h1>Sea Ice Coverage in the Hudson Bay Area</h1>
+  <h1>Sea Ice Coverage in the Hudson Bay Region</h1>
   <p>
-    Python-based analysis of seasonal cycles and long-term trends in Arctic sea ice.
+    Geospatial analysis of Arctic sea ice dynamics based on daily satellite observations.
   </p>
 </header>
 
 <main>
 
+<!-- =========================================================
+     Scientific Context
+========================================================= -->
+<section class="container info-box">
+  <h2>Scientific Context</h2>
+
+  <p>
+    Sea ice coverage is a key indicator of climate change in polar regions.
+    The Hudson Bay area is particularly sensitive due to its relatively shallow depth
+    and strong seasonal variability.
+  </p>
+
+  <p>
+    This project analyzes long-term changes in ice coverage by combining
+    daily satellite observations with geospatial processing techniques.
+    The focus lies on quantifying:
+  </p>
+
+  <ul>
+    <li>Seasonal freezing and melting cycles</li>
+    <li>Interannual variability</li>
+    <li>Long-term trends in ice extent</li>
+  </ul>
+</section>
+
+<!-- =========================================================
+     Region Definition
+========================================================= -->
 <section class="container">
 
-  <figure class=plot>
+  <figure class="plot">
     <img src="../assets/ice/hudson_bay_area.png"
          alt="Hudson Bay Area"
          class="plot-image" />
 
     <figcaption class="caption">
-      Geospatial plot of the Hudson Bay Area showing the region of interest.
+      Region of interest used for the analysis. The mask defines ocean areas
+      within Hudson Bay for which sea ice concentration is evaluated.
     </figcaption>
   </figure>
 
-  <figure class=plot>
+  <p>
+    The region is defined using a geographic mask derived from coastline data.
+    Only ocean grid cells are included in the analysis to ensure a physically
+    meaningful normalization of ice coverage.
+  </p>
+
+</section>
+
+<!-- =========================================================
+     Data Pipeline
+========================================================= -->
+<section class="container">
+  <h2>Data Pipeline</h2>
+
+  <p>
+    The analysis is based on daily sea ice concentration data spanning multiple decades.
+    Raw data is processed in several steps:
+  </p>
+
+  <ol>
+    <li>Download daily satellite-derived sea ice concentration fields</li>
+    <li>Extract the Hudson Bay region using a geographic mask</li>
+    <li>Compute total ice-covered area relative to ocean surface</li>
+    <li>Aggregate results into time series</li>
+  </ol>
+
+  <p>
+    Due to the large volume of input data (daily resolution over ~40 years),
+    preprocessing is computationally expensive and is therefore separated from
+    the visualization layer.
+  </p>
+</section>
+
+<!-- =========================================================
+     Results – Time Series
+========================================================= -->
+<section class="container">
+
+  <figure class="plot">
     <img src="../assets/ice/hudson_bay_timeseries.png"
          alt="Time series of sea ice coverage in Hudson Bay"
          class="plot-image" />
 
     <figcaption class="caption">
-      Time series of sea ice coverage showing a systematic reduction of ice extent
-      and a shift towards shorter ice-covered seasons.
+      Time series of relative sea ice coverage. The data reveals a systematic
+      reduction in ice extent and a shift towards shorter ice-covered seasons.
     </figcaption>
   </figure>
 
-  <figure class=plot>
+  <p>
+    The time series highlights both seasonal cycles and long-term trends.
+    Recent decades show a clear tendency towards earlier melting and delayed freezing.
+  </p>
+
+</section>
+
+<!-- =========================================================
+     Results – Seasonal Structure
+========================================================= -->
+<section class="container">
+
+  <figure class="plot">
     <img src="../assets/ice/hudson_bay_polar.png"
          alt="Polar plot of seasonal ice coverage"
          class="plot-image" />
 
     <figcaption class="caption">
-      Polar representation of seasonal ice cycles illustrating the extension of
-      ice-free periods over recent decades.
+      Polar representation of seasonal cycles. Each curve corresponds to a single year,
+      allowing direct comparison of seasonal dynamics across decades.
     </figcaption>
   </figure>
 
+  <p>
+    The polar representation emphasizes structural changes in the seasonal cycle,
+    revealing an expansion of ice-free periods and increased variability.
+  </p>
+
+</section>
+
+<!-- =========================================================
+     Outlook / Extensions
+========================================================= -->
+<section class="container">
+  <h2>Outlook</h2>
+
+  <p>
+    The current implementation focuses on a fixed region. Future extensions include:
+  </p>
+
+  <ul>
+    <li>Interactive region selection (Region Picker)</li>
+    <li>Support for multiple datasets and satellite products</li>
+    <li>Automated generation of animations and seasonal summaries</li>
+  </ul>
 
 </section>
 
@@ -65,15 +166,15 @@
 </section>
 
 </main>
+
 <footer>
   <p>© <span id="year"></span> Christian Lurz</p>
 </footer>
 
-
-
 <script>
   document.getElementById("year").textContent = new Date().getFullYear();
 </script>
+
 <div id="lightbox" class="lightbox" aria-hidden="true">
   <img id="lightbox-img" alt="">
 </div>
@@ -98,5 +199,6 @@
     if (e.key === "Escape") lightbox.classList.remove("active");
   });
 </script>
+
 </body>
 </html>
