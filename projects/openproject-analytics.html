@@ -45,6 +45,44 @@
         <div id="milestone-chart"></div>
       </section>
 
+      <section>
+        <h2>Interpretation</h2>
+        <p>
+          Each bar represents a milestone. The length encodes the combined score,
+          which reflects both estimated effort and associated risk.
+        </p>
+        <p>
+          Color encodes the total risk exposure based on the probability-weighted
+          risks linked to each milestone.
+        </p>
+      </section>
+
+      <section>
+        <h2>Scoring Model</h2>
+
+        <p>
+          The combined score is computed as:
+        </p>
+
+        <p>
+          $$\text{Combined Score} = \text{Story Points} \times \text{Risk Exposure} $$
+        </p>
+
+        <p>
+          where the risk exposure is defined as the sum of weighted risk probabilities:
+        </p>
+
+        <p>
+          $$ \text{Risk Exposure} = \sum_i w_i $$
+        </p>
+
+        <p>
+          Each risk is assigned a weight based on its probability level
+          (e.g. low, intermediate, high).
+        </p>
+      </section>
+
+
       <!-- 🌐 Network Graph -->
       <section>
         <h2>Milestone–Risk Relationships</h2>
@@ -86,6 +124,13 @@
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
+
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 </body>
 </html>
