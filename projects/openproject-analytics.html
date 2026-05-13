@@ -42,23 +42,7 @@
       <!-- 📊 Visualization -->
       <section>
         <h2>Milestone Overview</h2>
-        <div id="milestone-chart"></div>
-      </section>
-
-      <section>
-        <h2>Interpretation</h2>
-        <p>
-          Each bar represents a milestone. The length encodes the combined score,
-          which reflects both estimated effort and associated risk.
-        </p>
-        <p>
-          Color encodes the total risk exposure based on the probability-weighted
-          risks linked to each milestone.
-        </p>
-      </section>
-
-      <section>
-        <h2>Scoring Model</h2>
+        <h3>Scoring Model</h3>
 
         <p>
           The combined score is computed as:
@@ -82,11 +66,36 @@
         </p>
       </section>
 
+      <section class="container figure d3-figure">
+        <header class="figure-header">
+          <div id="description"></div>
+        </header>
+        <div class="figure-body">
+          <div id="milestone-chart"></div>
+        </div>
+        <figcaption class="figure-caption">
+          Each bar represents a milestone. The length encodes the combined score,
+          which reflects both estimated effort and associated risk.
+          Color encodes the total risk exposure based on the probability-weighted
+          risks linked to each milestone.
+        </figcaption>
+      </section>
+
+
 
       <!-- 🌐 Network Graph -->
-      <section>
-        <h2>Milestone–Risk Relationships</h2>
-        <div id="network-graph"></div>
+      <section class="container figure d3-figure">
+        <header class="figure-header">
+          <h2>Milestone–Risk Relationships</h2>
+        </header>
+        <div class="figure-body">
+          <div id="network"></div>
+        </div>
+        <figcaption class="figure-caption">
+          This graph visualizes relationships between milestones (circles) and risks (squares).
+          Risk probability is encoded by color intensity (darker = higher probability).
+          Hover over nodes to see full titles.
+        </figcaption>
       </section>
 
       <!-- ⚙️ Methodology -->
@@ -119,7 +128,7 @@
   <script src="https://d3js.org/d3.v7.min.js"></script>
 
   <!-- Your script -->
-  <script src="../js/openproject-analytics.js"></script>
+  <script type="module" src="../js/main.js"></script>
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();

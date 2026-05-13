@@ -12,7 +12,7 @@ function validateData(data) {
   });
 }
 
-function renderMilestoneChart(data) {
+export function renderMilestoneChart(data) {
   // Sort descending
   data.sort((a, b) => b.combined_score - a.combined_score);
 
@@ -79,13 +79,3 @@ function renderMilestoneChart(data) {
 }
 
 
-// === Entry Point ===
-d3.json(DATA_URL)
-  .then(data => {
-    console.log("Loaded data:", data);
-    validateData(data);
-    renderMilestoneChart(data);
-  })
-  .catch(error => {
-    console.error("Error loading data:", error);
-  });
