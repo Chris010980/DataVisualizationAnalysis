@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenProject Analytics | Christian Lurz</title>
+
+  <meta
+    name="description"
+    content="Project analytics based on OpenProject exports: milestone structure, risk exposure, and effort estimation visualized with D3.js."
+  />
+
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+
+<body>
+  <div class="container">
+
+    <header class="hero">
+      <div>
+        <h1>OpenProject Analytics</h1>
+        <p>
+          This project analyzes milestone structure, effort estimation, and risk exposure
+          based on OpenProject exports. The data pipeline is implemented in Python,
+          while the visualization layer uses D3.js.
+        </p>
+      </div>
+    </header>
+
+    <main>
+
+      <!-- 🧠 Context -->
+      <section>
+        <h2>Project Context</h2>
+        <p>
+          The goal is to transform project management data into actionable insights.
+          Milestones, story points, and risks are combined into quantitative metrics
+          to support prioritization and decision-making.
+        </p>
+      </section>
+
+      <!-- 📊 Visualization -->
+      <section>
+        <h2>Milestone Overview</h2>
+        <div id="milestone-chart"></div>
+      </section>
+
+      <!-- 🌐 Network Graph -->
+      <section>
+        <h2>Milestone–Risk Relationships</h2>
+        <div id="network-graph"></div>
+      </section>
+
+      <!-- ⚙️ Methodology -->
+      <section>
+        <h2>Methodology</h2>
+        <ul>
+          <li>Data extraction from OpenProject (XLS export)</li>
+          <li>Parsing and normalization in Python</li>
+          <li>Risk weighting based on probability</li>
+          <li>Computation of combined effort-risk scores</li>
+        </ul>
+      </section>
+
+      <!-- 🔙 Navigation -->
+      <section>
+        <p>
+          <a href="../index.html">← Back to overview</a>
+        </p>
+      </section>
+
+    </main>
+
+    <footer>
+      <p>© <span id="year"></span> Christian Lurz</p>
+    </footer>
+
+  </div>
+
+  <!-- D3 -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
+  <!-- Your script -->
+  <script src="../js/openproject-analytics.js"></script>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
