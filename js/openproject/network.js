@@ -11,10 +11,21 @@ export function renderNetwork(data) {
   // ---------------------------
   // Build nodes
   // ---------------------------
+  const milestoneTitleById = Object.fromEntries(
+    data.milestones.map(m => [m.id, m.title])
+  );
+
+  const riskTitleById = Object.fromEntries(
+    data.risks.map(r => [r.id, r.title])
+  );
+
   const milestoneNodes = data.milestones.map(m => ({
     id: `m${m.id}`,
     label: m.title,
-    type: "milestone"
+    type: "milestone",
+    priority: m.priority,
+    story_points: m.story_points,
+    risks: m.risks
   }));
 
   const connectedRiskIds = new Set();
@@ -29,7 +40,9 @@ export function renderNetwork(data) {
       id: `r${r.id}`,
       label: r.title,
       type: "risk",
-      probability: r.probability
+      probability: r.probability,
+      status: r.status,
+      milestones: r.milestones
     }));
 
   const nodes = [...milestoneNodes, ...riskNodes];
@@ -108,8 +121,52 @@ export function renderNetwork(data) {
   });
 
   // Tooltip
-  node.append("title")
-    .text(d => d.label);
+  const tooltip = d3.select("#tooltip");
+
+  const formatMilestoneRiskInfo = d => {
+    const risks = Array.isArray(d.risks) ? d.risks : [];
+    return risks.length > 0
+      ? `<ul>${risks.map(r => `<li>${riskTitleById[r.id] ?? `Risk #${r.id}`} (${r.probability ?? "?"})</li>`).join("")}</ul>`
+      : "<div class='tooltip-empty'>No connected risks</div>";
+  };
+
+  const formatRiskMilestoneInfo = d => {
+    const milestones = Array.isArray(d.milestones) ? d.milestones : [];
+    return milestones.length > 0
+      ? `<ul>${milestones.map(m => `<li>${milestoneTitleById[m.id] ?? `Milestone #${m.id}`}${m.story_points ? ` — ${m.story_points}sp` : ""}${m.priority ? ` (${m.priority})` : ""}</li>`).join("")}</ul>`
+      : "<div class='tooltip-empty'>No linked milestones</div>";
+  };
+
+  node.on("mouseover", (event, d) => {
+      const html = d.type === "milestone"
+        ? `
+            <strong>${d.label}</strong><br>
+            Type: Milestone<br>
+            Priority: ${d.priority ?? "–"}<br>
+            Story Points: ${d.story_points ?? "–"}<br>
+            <div class="tooltip-heading">Connected Risks</div>
+            ${formatMilestoneRiskInfo(d)}
+          `
+        : `
+            <strong>${d.label}</strong><br>
+            Type: Risk<br>
+            Probability: ${d.probability ?? "–"}<br>
+            <div class="tooltip-heading">Linked Milestones</div>
+            ${formatRiskMilestoneInfo(d)}
+          `;
+
+      tooltip
+        .style("visibility", "visible")
+        .html(html);
+    })
+    .on("mousemove", event => {
+      tooltip
+        .style("left", `${event.pageX + 15}px`)
+        .style("top", `${event.pageY - 30}px`);
+    })
+    .on("mouseout", () => {
+      tooltip.style("visibility", "hidden");
+    });
 
   // ---------------------------
   // Legend

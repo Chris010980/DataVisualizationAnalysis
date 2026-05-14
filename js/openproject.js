@@ -60,14 +60,37 @@ async function init() {
   try {
     const response_milestone = await fetch(DATA_URL_MILESTONE);
     milestoneData = await response_milestone.json();
-    
+
+    const response_network = await fetch(DATA_URL_NETWORK);
+    networkData = await response_network.json();
+
+    const riskById = Object.fromEntries(
+      networkData.risks.map(r => [r.id, r])
+    );
+
+    const milestoneById = Object.fromEntries(
+      networkData.milestones.map(m => [m.id, m])
+    );
+
+    milestoneData = milestoneData.map(m => {
+      const parsed = milestoneById[m.id];
+      const risks = Array.isArray(parsed?.risks) ? parsed.risks : [];
+      return {
+        ...m,
+        priority: parsed?.priority ?? m.priority,
+        risks: risks.map(r => ({
+          id: r.id,
+          probability: r.probability,
+          title: riskById[r.id]?.title ?? `Risk #${r.id}`,
+          status: riskById[r.id]?.status
+        }))
+      };
+    });
+
     // Map erstellen: id -> risk_exposure
     riskExposureMap = Object.fromEntries(
       milestoneData.map(m => [m.id, m.risk_exposure])
     );
-
-    const response_network = await fetch(DATA_URL_NETWORK);
-    networkData = await response_network.json();
 
     // UI Events
     const riskFilter = document.getElementById("riskFilter");
