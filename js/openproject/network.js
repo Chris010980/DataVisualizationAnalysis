@@ -17,12 +17,20 @@ export function renderNetwork(data) {
     type: "milestone"
   }));
 
-  const riskNodes = data.risks.map(r => ({
-    id: `r${r.id}`,
-    label: r.title,
-    type: "risk",
-    probability: r.probability
-  }));
+  const connectedRiskIds = new Set();
+
+  data.milestones.forEach(m => {
+    m.risks.forEach(r => connectedRiskIds.add(r.id));
+  });
+
+  const riskNodes = data.risks
+    .filter(r => connectedRiskIds.has(r.id))
+    .map(r => ({
+      id: `r${r.id}`,
+      label: r.title,
+      type: "risk",
+      probability: r.probability
+    }));
 
   const nodes = [...milestoneNodes, ...riskNodes];
 

@@ -37,12 +37,19 @@
           Milestones, story points, and risks are combined into quantitative metrics
           to support prioritization and decision-making.
         </p>
+        <p style="font-size: 0.95em; color: #666; margin-top: 0.8em;">
+          <strong>What:</strong> Automated risk & effort analysis from project exports. 
+          <strong>Why:</strong> Enables data-driven prioritization and early identification of high-impact milestones.
+        </p>
       </section>
 
       <!-- 📊 Visualization -->
       <section>
         <h2>Milestone Overview</h2>
         <h3>Scoring Model</h3>
+        <p style="font-size: 0.95em; color: #666; margin-bottom: 1em;">
+          Combines effort (story points) and risk to identify which milestones deserve priority attention.
+        </p>
 
         <p>
           The combined score is computed as:
@@ -70,18 +77,40 @@
         <header class="figure-header">
           <div id="description"></div>
         </header>
+        <div id="controls" class="controls">
+          <label>
+            Min Risk Exposure:
+            <input type="range" id="riskFilter" min="0" max="10" step="1" value="0">
+            <span id="riskValue">0</span>
+          </label>
+
+          <label>
+            Min Priority:
+            <select id="priorityFilter">
+              <option value="0">All</option>
+              <option value="1">Low+</option>
+              <option value="2">Intermediate+</option>
+              <option value="3">High+</option>
+              <option value="4">Very High</option>
+            </select>
+          </label>
+        </div>  
         <div class="figure-body">
           <div id="milestone-chart"></div>
         </div>
         <figcaption class="figure-caption">
-          Each bar represents a milestone. The length encodes the combined score,
-          which reflects both estimated effort and associated risk.
-          Color encodes the total risk exposure based on the probability-weighted
-          risks linked to each milestone.
+          Each bar represents a milestone, sized by combined score (effort × risk).
+          <strong>Color encoding:</strong> risk exposure — accumulated probability-weighted risks per milestone.
         </figcaption>
       </section>
 
-
+      <!-- ⚠️ Key Insight -->
+      <section style="background: #f9f9f9; padding: 1.5em; border-left: 4px solid #0066cc; margin: 2em 0;">
+        <p style="margin: 0; font-size: 0.95em;">
+          <strong>Important:</strong> The following graph uses a different color scheme. While the Milestone chart shows cumulative <strong>risk exposure</strong>, 
+          the Network graph colors individual risks by their <strong>probability of occurrence</strong> (darker = more likely).
+        </p>
+      </section>
 
       <!-- 🌐 Network Graph -->
       <section class="container figure d3-figure">
@@ -92,8 +121,8 @@
           <div id="network"></div>
         </div>
         <figcaption class="figure-caption">
-          This graph visualizes relationships between milestones (circles) and risks (squares).
-          Risk probability is encoded by color intensity (darker = higher probability).
+          Visualizes dependencies between milestones (circles) and individual risks (squares).
+          <strong>Color encoding:</strong> risk probability — darker color indicates higher likelihood of occurrence.
           Hover over nodes to see full titles.
         </figcaption>
       </section>
@@ -128,7 +157,7 @@
   <script src="https://d3js.org/d3.v7.min.js"></script>
 
   <!-- Your script -->
-  <script type="module" src="../js/main.js"></script>
+  <script type="module" src="../js/openproject.js"></script>
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();

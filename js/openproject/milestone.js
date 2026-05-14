@@ -16,7 +16,7 @@ export function renderMilestoneChart(data) {
   // Sort descending
   data.sort((a, b) => b.combined_score - a.combined_score);
 
-  const margin = { top: 20, right: 30, bottom: 40, left: 250 };
+  const margin = { top: 20, right: 180, bottom: 40, left: 250 };
   const width = 900 - margin.left - margin.right;
   const height = 400 - margin.top - margin.bottom;
 
@@ -37,9 +37,26 @@ export function renderMilestoneChart(data) {
     .range([0, height])
     .padding(0.2);
 
-  const color = d3.scaleSequential()
-    .domain([0, d3.max(data, d => d.risk_exposure)])
-    .interpolator(d3.interpolateOrRd);
+  // Continuous color scale with 5 color stops
+  const minRisk = d3.min(data, d => d.risk_exposure);
+  const maxRisk = d3.max(data, d => d.risk_exposure);
+  
+  const color = d3.scaleLinear()
+    .domain([
+      minRisk,
+      minRisk + (maxRisk - minRisk) * 0.25,
+      minRisk + (maxRisk - minRisk) * 0.5,
+      minRisk + (maxRisk - minRisk) * 0.75,
+      maxRisk
+    ])
+    .range([
+      "#ffffb2",  // Very Low
+      "#fecc5c",  // Low
+      "#fd8d3c",  // Intermediate
+      "#f03b20",  // High
+      "#bd0026"   // Very High
+    ])
+    .clamp(true);
 
   // Bars
   svg.selectAll("rect")

@@ -524,3 +524,32 @@ figure {
 .d3-code-block .token {
   text-shadow: none !important;
 }
+
+/* =========================================================
+   UI controls (Dropdowns, Buttons, etc.)
+========================================================= */
+
+.controls {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-weight: 500;
+}
+
+.controls input[type="range"] {
+  width: 150px;
+}
+
+.controls select {
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
