@@ -10,6 +10,12 @@
         content="Visualization of the effective electron potential in the helium atom using a reduced two-electron model." />
 
   <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -19,6 +25,12 @@
   <p>
     Quantum-mechanical visualization of electron–electron interaction effects.
   </p>
+  <p>
+    Source code:
+    <a href="https://github.com/Chris010980/helium_potential_showcase" target="_blank">
+      github.com/Chris010980/helium_potential_showcase
+    </a>
+  </p>
 </header>
 
 <main>
@@ -26,7 +38,7 @@
 <section class="container">
 
   <figure class=plot>
-    <img src="../assets/helium/1D-Pot.png"
+    <img src="https://raw.githubusercontent.com/Chris010980/helium_potential_showcase/master/output/plots/1D-Pot_2.50.png"
          alt="1D slice of effective electron potential"
          class="plot-image" />
 
@@ -36,9 +48,34 @@
     </figcaption>
   </figure>
 
+  <details class="code-block">
+    <summary>Potential evaluation (Python)</summary>
+    <pre><code class="language-python">
+  x, y, X, Y = create_grid()
+
+  z = 0.0
+  z2 = 0.0
+  ZC = 2.0
+  y2 = 0.0
+  x2_inf = 3000.0
+
+  pot_ref = potential(X, Y, z, x2_inf, y2, z2, ZC)
+
+  pot_1d = potential(
+      X,
+      Y,
+      z,
+      electron_distance_1d,
+      y2,
+      z2,
+      ZC,
+  )
+    </code></pre>
+  </details>
+
   <figure class=plot>
     <video controls class="responsive-image">
-      <source src="../assets/helium/1D-potential.mp4" type="video/mp4">
+      <source src="https://raw.githubusercontent.com/Chris010980/helium_potential_showcase/master/output/videos/1D_animation.mp4" type="video/mp4">
     </video>
 
     <figcaption class="caption">
@@ -47,8 +84,35 @@
     </figcaption>
   </figure>
 
+  <details class="code-block">
+    <summary>Animation frame generation</summary>
+    <pre><code class="language-python">
+  distances = build_distance_sequence()
+
+  one_d_paths = generate_1d_frames(
+      x,
+      X,
+      Y,
+      pot_ref,
+      z,
+      y2,
+      z2,
+      ZC,
+      distances,
+      one_d_dir,
+      y_index=pot_ref.shape[1] // 2,
+  )
+
+  video_path = create_video(
+      one_d_dir,
+      videos_dir / '1D_animation',
+      framerate=framerate,
+  )
+    </code></pre>
+  </details>
+
   <figure class=plot>
-    <img src="../assets/helium/potential_slice.png"
+    <img src="https://raw.githubusercontent.com/Chris010980/helium_potential_showcase/master/output/plots/2D-Pot_2.50.png"
          alt="2D slice of effective electron potential"
          class="plot-image" />
 
@@ -60,9 +124,58 @@
     </figcaption>
   </figure>
 
+  <details class="code-block">
+    <summary>2D potential field visualization</summary>
+    <pre><code class="language-python">
+  pot_2d = potential(
+      X,
+      Y,
+      z,
+      electron_distance_2d,
+      y2,
+      z2,
+      ZC,
+  )
+
+  plot_2d_path = plot_2d_field(
+      X,
+      Y,
+      pot_2d,
+      electron_distance=electron_distance_2d,
+      output_dir=plots_dir,
+  )
+    </code></pre>
+  </details>
+  <details class="code-block">
+    <summary>2D potential field rendering</summary>
+    <pre><code class="language-python">
+  pcm = ax.pcolormesh(
+      X,
+      Y,
+      pot,
+      cmap='seismic',
+      vmin=-0.5,
+      vmax=0.5,
+      shading='auto',
+  )
+
+  ax.set_aspect('equal', adjustable='box')
+
+  contours = ax.contour(
+      X,
+      Y,
+      pot,
+      levels=(-0.3, -0.2, -0.1, 0.0),
+      colors='0.3',
+      linewidths=0.8,
+  )
+
+  ax.clabel(contours, inline=True, fontsize=8)
+    </code></pre>
+  </details>
   <figure class=plot>
     <video controls class="responsive-image">
-      <source src="../assets/helium/2D-potential.mp4" type="video/mp4">
+      <source src="https://raw.githubusercontent.com/Chris010980/helium_potential_showcase/master/output/videos/2D_animation.mp4" type="video/mp4">
     </video>
 
     <figcaption class="caption">
@@ -98,6 +211,30 @@
     electron–electron interaction in real space.
   </p>
 </section>
+<details class="code-block">
+  <summary>Helium effective potential model</summary>
+  <pre><code class="language-python">
+def potential(
+    x: np.ndarray,
+    y: np.ndarray,
+    z: float,
+    x2: float,
+    y2: float,
+    z2: float,
+    ZC: float,
+) -> np.ndarray:
+
+    r = np.sqrt(x**2 + y**2 + z**2)
+
+    r2 = np.sqrt(
+        (x - x2) ** 2
+        + (y - y2) ** 2
+        + (z - z2) ** 2
+    )
+
+    return -ZC / r + 1 / r2
+  </code></pre>
+</details>
 <section class="container">
   <h2>Interpretation</h2>
 
@@ -157,6 +294,22 @@
     <li>Animation via frame generation and video encoding</li>
   </ul>
 </section>
+<details class="code-block">
+  <summary>Consistent scientific plotting style</summary>
+  <pre><code class="language-python">
+mpl.rcParams.update({
+    "figure.figsize": (7.8, 4.9),
+    "figure.dpi": 150,
+    "font.size": 10,
+    "axes.titlesize": 12,
+    "axes.labelsize": 11,
+    "lines.linewidth": 1.8,
+    "grid.linestyle": "dashed",
+    "grid.alpha": 0.3,
+    "savefig.bbox": "tight",
+})
+  </code></pre>
+</details>
 <section>
   <p><a href="../index.html">← Back to overview</a></p>
 </section>
