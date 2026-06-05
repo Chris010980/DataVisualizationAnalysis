@@ -13,30 +13,7 @@
 
   <link rel="stylesheet" href="css/style.css" />
 </head>
-<script>
-  const shareButton = document.getElementById("shareButton");
-  const shareMessage = document.getElementById("shareMessage");
 
-  shareButton.addEventListener("click", async () => {
-
-    const shareData = {
-      title: "Christian Lurz - Data Visualization & Analysis",
-      text: "Scientific data visualization and analysis projects.",
-      url: window.location.href
-    };
-
-    try {
-      if (navigator.share) {
-        await navigator.share(shareData);
-      } else {
-        await navigator.clipboard.writeText(window.location.href);
-        shareMessage.textContent = "Link copied to clipboard.";
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  });
-</script>
 <body>
   <div class="container">
     <header class="hero">
@@ -247,6 +224,29 @@
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
+  <script>
+    const shareButton = document.getElementById("shareButton");
+    const shareMessage = document.getElementById("shareMessage");
 
+    shareButton.addEventListener("click", async () => {
+
+      const shareData = {
+        title: "Christian Lurz - Data Visualization & Analysis",
+        text: "Scientific data visualization and analysis projects.",
+        url: window.location.href
+      };
+
+      try {
+        if (navigator.share) {
+          await navigator.share(shareData);
+        } else {
+          await navigator.clipboard.writeText(window.location.href);
+          shareMessage.textContent = "Link copied to clipboard.";
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    });
+  </script>
 </body>
 </html>
