@@ -575,3 +575,60 @@ figure {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
+/* =========================================================
+   Share buttons
+========================================================= */
+
+.share-section {
+    text-align: center;
+    margin-top: 4rem;
+    margin-bottom: 2rem;
+}
+
+.share-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.share-btn {
+    padding: 0.75rem 1.2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: transform 0.15s ease;
+}
+
+.share-btn:hover {
+    transform: translateY(-2px);
+}
+
+.facebook {
+    background: #1877f2;
+    color: white;
+}
+
+.linkedin {
+    background: #0a66c2;
+    color: white;
+}
+
+.reddit {
+    background: #ff4500;
+    color: white;
+}
+
+.general {
+    background: #444;
+    color: white;
+}
+
+.github {
+    background: #24292f;
+    color: white;
+}
