@@ -93,11 +93,23 @@ The project combines automated data acquisition, GIS processing,
 regional masking, statistical evaluation and publication-quality
 visualisations with daily updates.
 
+It is developed with a mandatory quality gate: 291 automated tests
+across five test levels, 96 % line coverage and CI-enforced static
+analysis.
+
+</p>
+
+<p>
+
+<a href="projects/sea-ice-testing.html">
+Testing &amp; Quality Assurance →
+</a>
+
 </p>
 
 <p class="project-tags">
 
-Python • Rasterio • Cartopy • GeoPandas • NumPy • Matplotlib
+Python • Rasterio • Cartopy • GeoPandas • NumPy • Matplotlib • PyTest • CI/CD
 
 </p>
 
@@ -320,6 +332,8 @@ known doping allegations.
 
 <li>Git</li>
 <li>PyTest</li>
+<li>Static Analysis</li>
+<li>CI Quality Gates</li>
 <li>Automation</li>
 <li>Reproducible Pipelines</li>
 
@@ -345,7 +359,7 @@ geospatial processing, quantitative analysis and modern web
 presentation.
 
 Particular emphasis is placed on transparency,
-maintainability and publication-quality output.
+maintainability, rigorous testing and publication-quality output.
 
 </p>
 
@@ -555,7 +569,6 @@ shareButton.addEventListener("click", async () => {
         } else {
 
             await navigator.clipboard.writeText(window.location.href);
-
             shareMessage.textContent =
                 "Link copied to clipboard.";
 

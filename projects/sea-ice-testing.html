@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Sea Ice Monitoring — Testing &amp; Quality Assurance</title>
+
+    <meta name="description"
+          content="Test architecture, CI quality gates, QA output validation and findings register of the Hudson Bay sea ice pipeline." />
+
+    <link rel="stylesheet" href="../css/style.css" />
+
+  </head>
+
+  <body>
+
+    <header>
+
+      <h1>Testing &amp; Quality Assurance</h1>
+
+      <p>
+        The Hudson Bay sea ice pipeline is developed with a mandatory
+        quality gate: every change passes static analysis and the full
+        test suite before it reaches the production branch. This page
+        summarises the test model, the CI gates and the QA validation
+        of the daily pipeline output.
+      </p>
+
+      <p>
+        Source code:
+        <a href="https://github.com/Chris010980/hudson_bay_sea_ice_showcase"
+          target="_blank" rel="noopener">
+          github.com/Chris010980/hudson_bay_sea_ice_showcase
+        </a>
+      </p>
+
+    </header>
+
+    <div class="container">
+
+      <main>
+
+        <!-- ====================================================== -->
+        <section class="info-container info-box">
+
+          <h2>Snapshot</h2>
+
+          <p>
+            Static snapshot of the test and analysis state
+            (measured after issue #41, 2026-10-19; the numbers are
+            updated whenever the suite changes).
+          </p>
+
+          <div class="stats-grid">
+
+            <div class="stat-card">
+              <h3>Tests</h3>
+              <p>291</p>
+            </div>
+
+            <div class="stat-card">
+              <h3>Test Files</h3>
+              <p>45</p>
+            </div>
+
+            <div class="stat-card">
+              <h3>Line Coverage</h3>
+              <p>96 %</p>
+            </div>
+
+            <div class="stat-card">
+              <h3>Lint Findings</h3>
+              <p>0</p>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- ====================================================== -->
+
+        <section>
+
+          <h2>Test Architecture</h2>
+
+          <p>
+            The suite is organized into five levels with distinct
+            responsibilities, from isolated pure-function tests to
+            complete end-to-end pipeline runs against real data.
+            Fixture verification tests additionally check the shared
+            test infrastructure itself.
+          </p>
+
+          <table class="results-table">
+
+            <thead>
+              <tr>
+                <th>Level</th>
+                <th>Files</th>
+                <th>Responsibility</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>Unit</td>
+                <td>20</td>
+                <td>Pure functions: dates, thresholds, trends, CLI
+                    parsing, output validation</td>
+              </tr>
+              <tr>
+                <td>Fixture verification</td>
+                <td>4</td>
+                <td>Shared pytest fixtures and static fixture data</td>
+              </tr>
+              <tr>
+                <td>Component</td>
+                <td>14</td>
+                <td>Single components with real I/O on temporary
+                    directories</td>
+              </tr>
+              <tr>
+                <td>Integration</td>
+                <td>5</td>
+                <td>Stage collaboration (download → process →
+                    plots → build)</td>
+              </tr>
+              <tr>
+                <td>End-to-end</td>
+                <td>2</td>
+                <td>Complete workflow and incremental daily update,
+                    including the website build</td>
+              </tr>
+            </tbody>
+
+          </table>
+
+          <p>
+            Scientific calculations are verified with hand-computed
+            reference values wherever possible, so that test failures
+            point at actual changes of the scientific semantics.
+          </p>
+
+        </section>
+
+        <details class="code-block">
+
+          <summary>Unit test: linear trend with hand-calculated values</summary>
+
+          <pre><code class="language-python">def test_noisy_fit_matches_hand_calculation() -> None:
+    """Least-squares fit of (1,1), (2,2), (3,4).
+
+    slope = 1.5, intercept = -2/3, R² = 27/28 (hand values).
+    """
+    x = np.array([1.0, 2.0, 3.0])
+    y = np.array([1.0, 2.0, 4.0])
+
+    slope, intercept, r_squared = compute_linear_trend(x, y)
+
+    assert slope == pytest.approx(1.5)
+    assert intercept == pytest.approx(-2.0 / 3.0)
+    assert r_squared == pytest.approx(27.0 / 28.0)</code></pre>
+
+        </details>
+
+        <!-- ====================================================== -->
+
+        <section>
+
+          <h2>CI Quality Gates</h2>
+
+          <p>
+            The quality gate workflow runs on every push and pull
+            request. Ruff lint and format checks as well as the test
+            suite with coverage are mandatory and blocking; the
+            dead-code report is advisory. The workflow uses pinned
+            GitHub Actions versions on a fixed Python 3.12.
+          </p>
+
+          <ul>
+            <li><strong>Mandatory:</strong> ruff check, ruff format
+                --check, pytest --cov=src</li>
+            <li><strong>Advisory:</strong> vulture dead-code report
+                (min-confidence 90, with a documented whitelist)</li>
+            <li><strong>Local only:</strong> radon complexity checks
+                — no C-ranked function is allowed in the source
+                tree</li>
+          </ul>
+
+        </section>
+
+        <details class="code-block">
+
+          <summary>Quality gate workflow (excerpt)</summary>
+
+          <pre><code class="language-yaml">- name: Ruff lint (mandatory, blocking)
+  run: ruff check .
+
+- name: Ruff format check (mandatory, blocking)
+  run: ruff format --check .
+
+- name: Vulture dead-code report (advisory, non-blocking)
+  run: >
+    vulture src tests tests/vulture_whitelist.py
+    --min-confidence 90
+  continue-on-error: true
+
+- name: Run tests with coverage (mandatory, blocking)
+  run: >
+    pytest --cov=src
+    --cov-report=term-missing
+    --cov-report=xml:coverage.xml</code></pre>
+
+        </details>
+
+        <!-- ====================================================== -->
+
+        <section>
+
+          <h2>Robust Data Acquisition</h2>
+
+          <p>
+            Daily unattended operation requires defensive failure
+            handling. GeoTIFF downloads are atomic: files are streamed
+            into temporary <code>.part</code> files and moved into
+            place only after a complete transfer, with up to three
+            attempts per file before the file is skipped and counted
+            as failed. Interrupted downloads therefore never corrupt
+            the local archive.
+          </p>
+
+        </section>
+
+        <details class="code-block">
+
+          <summary>Atomic download with retries</summary>
+
+          <pre><code class="language-python">temp_path = local_dir / f"{filename}.part"
+
+for attempt in range(1, DOWNLOAD_MAX_ATTEMPTS + 1):
+    temp_path.unlink(missing_ok=True)
+
+    try:
+        if not self._stream_to_file(remote_url, temp_path):
+            return False
+
+        os.replace(temp_path, local_path)
+
+        logger.info("Saved %s", local_path)
+        return True
+
+    except requests.RequestException as exc:
+        logger.warning(
+            "Download attempt %d/%d for %s failed: %s",
+            attempt,
+            DOWNLOAD_MAX_ATTEMPTS,
+            remote_url,
+            exc,
+        )
+
+temp_path.unlink(missing_ok=True)
+
+return False</code></pre>
+
+        </details>
+
+        <!-- ====================================================== -->
+
+        <section>
+
+          <h2>QA Output Validation</h2>
+
+          <p>
+            A dedicated QA module validates the complete daily output
+            tree after every pipeline run: schema and consistency of
+            all CSV products, agreement between latest.json and the
+            summary data, completeness of the figure inventory
+            (including PNG magic-number checks) and the deployed
+            website build. The validator runs as a CLI whose exit code
+            equals the number of detected issues, so it can gate any
+            downstream automation.
+          </p>
+
+          <ul>
+            <li>Summary, timeseries, yearly and events CSVs
+                (schema, duplicates, malformed dates, value ranges)</li>
+            <li>latest.json consistency with the summary state</li>
+            <li>Complete plot inventory: six daily products per
+                region, plus yearly products when present</li>
+            <li>Build directory: deployed index.html and matching
+                analysis products</li>
+          </ul>
+
+        </section>
+
+        <details class="code-block">
+
+          <summary>Unit test: latest.json consistency check</summary>
+
+          <pre><code class="language-python">def test_latest_json_consistency_is_checked() -> None:
+    """A consistent payload passes; mismatches are reported."""
+    summary_df = _summary_frame()
+
+    assert (
+        validate_latest_json(_latest_payload(summary_df), summary_df)
+        == []
+    )
+
+    payload = _latest_payload(summary_df)
+    payload["date"] = "2020-01-01"
+    payload["observations"] = 99
+
+    issues = validate_latest_json(payload, summary_df)
+
+    assert len(issues) == 2
+    assert all("match" in issue for issue in issues)</code></pre>
+
+        </details>
+
+        <!-- ====================================================== -->
+
+        <section>
+
+          <h2>Findings Register</h2>
+
+          <p>
+            Testing is driven by a documented findings register:
+            dynamic-test findings are numbered
+            <strong>F-001 … F-031</strong>, static-analysis findings
+            <strong>S-001 … S-021</strong>. Every finding carries a
+            status (open, partial, fixed, documented) and is only
+            closed by a covering test or a documented decision.
+          </p>
+
+          <p>
+            This process has produced measurable results: the
+            static-analysis campaign reduced over 400 initial lint
+            findings to zero — today the source tree contains no
+            lint suppression directives at all — and the end-to-end
+            tests uncovered a real production bug (F-031): plotting
+            crashed with empty yearly CSV files on a first run. The
+            fix is pinned by a regression test and documented in the
+            regression testing guide.
+          </p>
+
+        </section>
+
+        <!-- ====================================================== -->
+
+        <section class="info-container info-box">
+
+          <h3>How the Snapshot is Maintained</h3>
+
+          <ul>
+            <li>The daily production run executes the pipeline, not
+                the test suite — the numbers on this page are a
+                maintained snapshot, labelled with its date.</li>
+            <li>The snapshot is updated in the same change that
+                alters findings, test counts or coverage, keeping
+                documentation and reality in sync.</li>
+            <li>The full methodology is documented in the repository
+                (<code>docs/testing/</code>): test levels, test
+                strategy, coverage policy, regression testing and QA
+                validation.</li>
+          </ul>
+
+        </section>
+
+        <!-- ====================================================== -->
+
+        <section>
+
+          <p>
+            <a href="sea-ice.html">← Back to the sea ice project</a>
+            &nbsp;•&nbsp;
+            <a href="../index.html">Portfolio overview</a>
+          </p>
+
+        </section>
+
+      </main>
+
+      <footer>
+
+        <p>
+          © <span id="year"></span> Christian Lurz
+        </p>
+
+      </footer>
+
+    </div>
+
+    <script>
+    document.getElementById("year").textContent =
+    new Date().getFullYear();
+    </script>
+
+  </body>
+
+</html>

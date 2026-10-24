@@ -21,16 +21,24 @@
       <h1>Hudson Bay Sea Ice Monitoring</h1>
 
       <p>
-        Automated geospatial processing pipeline for daily Arctic sea ice observations.
-        The project demonstrates data acquisition, GIS processing,
-        quantitative analysis and automated publication workflows using Python.
+        Automated geospatial processing pipeline for daily Arctic sea ice
+        observations. The project combines automated data acquisition,
+        GIS processing, quantitative trend analysis and automated
+        publication workflows — backed by 291 automated tests,
+        static analysis and CI quality gates.
       </p>
 
       <p>
         Source code:
         <a href="https://github.com/Chris010980/hudson_bay_sea_ice_showcase"
-          target="_blank">
+          target="_blank" rel="noopener">
           github.com/Chris010980/hudson_bay_sea_ice_showcase
+        </a>
+      </p>
+
+      <p>
+        <a href="sea-ice-testing.html">
+          Testing &amp; Quality Assurance →
         </a>
       </p>
 
@@ -46,18 +54,16 @@
           <h2>Project Overview</h2>
 
           <p>
-
-          Scientific satellite products are automatically downloaded from NSIDC,
-          processed using Rasterio and GeoPandas,
-          analysed for several predefined Arctic regions,
-          and exported as publication-quality figures and machine-readable datasets.
-
+            Daily satellite products are automatically downloaded from NSIDC,
+            processed using Rasterio and GeoPandas, analysed for five
+            predefined Arctic regions, and exported as publication-quality
+            figures and machine-readable datasets.
           </p>
 
           <p>
-
-          The pipeline is fully reproducible and intended for unattended daily execution.
-
+            The archive currently covers more than four decades of daily
+            observations (about 79,000 GeoTIFF products) and the pipeline
+            is fully reproducible, intended for unattended daily execution.
           </p>
 
         </section>
@@ -73,6 +79,11 @@
         <div class="stat-card">
         <h3>Observation</h3>
         <p id="datasetDate">loading...</p>
+        </div>
+
+        <div class="stat-card">
+        <h3>Observations</h3>
+        <p id="observations">loading...</p>
         </div>
 
         <div class="stat-card">
@@ -93,10 +104,8 @@
         </div>
 
         <p>
-
-        The values below are automatically generated during the
-        daily processing pipeline.
-
+          The values above and the regional statistics below are generated
+          automatically during the daily processing pipeline.
         </p>
 
         </section>
@@ -110,23 +119,15 @@
           <table class="results-table">
 
             <thead>
-
               <tr>
-
                 <th>Region</th>
-
                 <th>Coverage</th>
-
                 <th>Ice Area</th>
-
                 <th>Ocean Area</th>
-
               </tr>
-
             </thead>
 
             <tbody id="regionTableBody">
-
             </tbody>
 
           </table>
@@ -141,20 +142,15 @@
 
           <ol>
 
-            <li>Automatic download of daily NSIDC GeoTIFF products</li>
-
+            <li>Automatic download of daily NSIDC GeoTIFF products,
+                atomically and with retries</li>
             <li>GeoTIFF validation</li>
-
             <li>Polar stereographic processing</li>
-
             <li>Region masking using GeoJSON polygons</li>
-
-            <li>Ice coverage statistics</li>
-
-            <li>Automatic generation of figures</li>
-
-            <li>Export of CSV and latest.json</li>
-
+            <li>Ice coverage statistics, climatology and trend analysis</li>
+            <li>Automatic generation of all figure products</li>
+            <li>Export of CSV products and latest.json</li>
+            <li>QA validation of the complete output tree</li>
             <li>Deployment to GitHub Pages</li>
 
           </ol>
@@ -170,15 +166,13 @@
           <figure class="plot">
 
             <img
-            src="https://raw.githubusercontent.com/Chris010980/hudson_bay_sea_ice_showcase/master/output/plots/spatial/overview_hudson_bay.png"
+            src="https://raw.githubusercontent.com/Chris010980/hudson_bay_sea_ice_showcase/stable/output/plots/spatial/overview_hudson_bay.png"
             alt="Hudson Bay overview"
             class="plot-image"/>
 
             <figcaption>
-
-            Daily sea ice concentration map together with the analysis region used for the
-            statistical evaluation.
-
+            Daily sea ice concentration map together with the analysis
+            region used for the statistical evaluation.
             </figcaption>
 
           </figure>
@@ -189,17 +183,10 @@
 
           <summary>Daily download pipeline</summary>
 
-          <pre><code class="language-python">
-
-          summary = downloader.sync(
-
-              start_date=start_date,
-
-              keep_existing=True,
-
-          )
-
-          </code></pre>
+          <pre><code class="language-python">summary = downloader.sync(
+    start_date=start_date,
+    keep_existing=True,
+)</code></pre>
 
         </details>
 
@@ -212,15 +199,13 @@
         <figure class="plot">
 
         <img
-        src="https://raw.githubusercontent.com/Chris010980/hudson_bay_sea_ice_showcase/master/output/plots/daily_timeseries/classical_timeseries/relative/Hudson_Bay_Area_relative.png"
+        src="https://raw.githubusercontent.com/Chris010980/hudson_bay_sea_ice_showcase/stable/output/plots/daily_timeseries/classical_timeseries/relative/Hudson_Bay_Area_relative.png"
         class="plot-image"
         alt="Hudson Bay Time Series"/>
 
         <figcaption>
-
         Relative sea ice coverage for all available years.
         Colours indicate observation year.
-
         </figcaption>
 
         </figure>
@@ -231,23 +216,12 @@
 
         <summary>Region analysis</summary>
 
-        <pre><code class="language-python">
+        <pre><code class="language-python">mask = filter_manager.get_mask("Hudson Bay")
 
-        mask = filter_manager.get_mask(
-
-            "Hudson Bay",
-
-        )
-
-        coverage = analyzer.calculate(
-
-            raster,
-
-            mask,
-
-        )
-
-        </code></pre>
+coverage = analyzer.calculate(
+    raster,
+    mask,
+)</code></pre>
 
         </details>
 
@@ -260,15 +234,13 @@
         <figure class="plot">
 
         <img
-        src="https://raw.githubusercontent.com/Chris010980/hudson_bay_sea_ice_showcase/master/output/plots/daily_timeseries/polar/relative/Hudson_Bay_polar_relative.png"
+        src="https://raw.githubusercontent.com/Chris010980/hudson_bay_sea_ice_showcase/stable/output/plots/daily_timeseries/polar/relative/Hudson_Bay_polar_relative.png"
         class="plot-image"
         alt="Hudson Bay Polar Plot"/>
 
         <figcaption>
-
         Polar representation of the annual freeze-up and melt cycle.
         Each curve represents one individual year.
-
         </figcaption>
 
         </figure>
@@ -279,23 +251,13 @@
 
         <summary>Cartopy visualization</summary>
 
-        <pre><code class="language-python">
-
-        ax.pcolormesh(
-
-            lon,
-
-            lat,
-
-            concentration,
-
-            cmap=ice_cmap,
-
-            transform=ccrs.PlateCarree(),
-
-        )
-
-        </code></pre>
+        <pre><code class="language-python">ax.pcolormesh(
+    lon,
+    lat,
+    concentration,
+    cmap=ice_cmap,
+    transform=ccrs.PlateCarree(),
+)</code></pre>
 
         </details>
 
@@ -303,29 +265,22 @@
 
         <section>
 
-        <h2>Technical Highlights</h2>
+        <h2>Climate Anomalies</h2>
 
-        <ul>
+        <figure class="plot">
 
-        <li>Automated daily data acquisition</li>
+        <img
+        src="https://raw.githubusercontent.com/Chris010980/hudson_bay_sea_ice_showcase/stable/output/plots/daily_timeseries/anomalies/relative/Hudson_Bay_relative_anomaly.png"
+        class="plot-image"
+        alt="Hudson Bay Anomaly Time Series"/>
 
-        <li>Python-based geospatial processing</li>
+        <figcaption>
+        Daily deviation of the relative sea ice coverage from the
+        1981–2010 climatological mean. Negative values indicate
+        below-normal ice conditions.
+        </figcaption>
 
-        <li>Rasterio for GeoTIFF analysis</li>
-
-        <li>Cartopy polar map projections</li>
-
-        <li>GeoJSON polygon masking</li>
-
-        <li>Pandas time-series aggregation</li>
-
-        <li>Automatic JSON export</li>
-
-        <li>Publication-quality Matplotlib figures</li>
-
-        <li>Fully reproducible processing pipeline</li>
-
-        </ul>
+        </figure>
 
         </section>
 
@@ -333,38 +288,148 @@
 
         <section>
 
-        <h2>Repository</h2>
+        <h2>Long-Term Trend</h2>
 
-        <p>
+        <figure class="plot">
 
-        The repository contains the complete processing pipeline,
-        including automated downloads,
-        geospatial analysis,
-        time-series generation,
-        and publication-quality visualisations.
+        <img
+        src="https://raw.githubusercontent.com/Chris010980/hudson_bay_sea_ice_showcase/stable/output/plots/yearly_timeseries/yearly_means/relative/Hudson_Bay_yearly_mean_relative.png"
+        class="plot-image"
+        alt="Hudson Bay Yearly Mean Trend"/>
 
-        </p>
+        <figcaption>
+        Annual mean relative sea ice coverage with linear least-squares
+        trend and coefficient of determination (R²).
+        </figcaption>
 
-        <p>
+        </figure>
 
-        All figures and statistics shown on this page are generated
-        automatically from the latest available NSIDC dataset.
+        </section>
 
-        </p>
+        <details class="code-block">
+
+        <summary>Trend computation — pinned by a unit test</summary>
+
+        <pre><code class="language-python">from src.analysis.timeseries_analyzer import (
+    compute_linear_trend,
+)
+
+
+def test_noisy_fit_matches_hand_calculation() -> None:
+    """Least-squares fit of (1,1), (2,2), (3,4).
+
+    slope = 1.5, intercept = -2/3, R² = 27/28 (hand values).
+    """
+    x = np.array([1.0, 2.0, 3.0])
+    y = np.array([1.0, 2.0, 4.0])
+
+    slope, intercept, r_squared = compute_linear_trend(x, y)
+
+    assert slope == pytest.approx(1.5)
+    assert intercept == pytest.approx(-2.0 / 3.0)
+    assert r_squared == pytest.approx(27.0 / 28.0)</code></pre>
+
+        </details>
+
+        <!-- ====================================================== -->
+
+        <section>
+
+        <h2>Threshold Durations</h2>
+
+        <figure class="plot">
+
+        <img
+        src="https://raw.githubusercontent.com/Chris010980/hudson_bay_sea_ice_showcase/stable/output/plots/yearly_timeseries/thresholds/relative/Hudson_Bay_threshold_duration.png"
+        class="plot-image"
+        alt="Hudson Bay Threshold Durations"/>
+
+        <figcaption>
+        Duration of the annual period in which the relative ice coverage
+        exceeds the 10 %, 50 % and 90 % thresholds.
+        </figcaption>
+
+        </figure>
+
+        </section>
+
+        <!-- ====================================================== -->
+
+        <section class="info-container info-box">
+
+          <h2>Quality Assurance</h2>
+
+          <p>
+            Every change passes mandatory CI quality gates
+            (ruff lint and format checks, pytest with coverage)
+            before it reaches the production branch.
+            The suite currently comprises 291 automated tests in 45 files
+            with 96 % line coverage, organized into five test levels from
+            isolated unit tests to full end-to-end pipeline runs.
+          </p>
+
+          <p>
+            <a href="sea-ice-testing.html">
+              Testing &amp; Quality Assurance in detail (with code
+              samples) →
+            </a>
+          </p>
+
+        </section>
+
+        <!-- ====================================================== -->
+
+        <section>
+
+          <h2>Technical Highlights</h2>
+
+          <ul>
+
+          <li>Automated daily data acquisition with atomic downloads</li>
+          <li>Python-based geospatial processing</li>
+          <li>Rasterio for GeoTIFF analysis</li>
+          <li>Cartopy polar map projections</li>
+          <li>GeoJSON polygon masking</li>
+          <li>Pandas time-series aggregation and trend analysis</li>
+          <li>Publication-quality Matplotlib figures</li>
+          <li>291 automated tests, 96 % line coverage</li>
+          <li>Mandatory CI quality gates and static analysis</li>
+          <li>Automated QA validation of the daily output tree</li>
+          <li>Fully reproducible processing pipeline</li>
+
+          </ul>
+
+        </section>
+
+        <!-- ====================================================== -->
+
+        <section>
+
+          <h2>Repository</h2>
+
+          <p>
+            The repository contains the complete processing pipeline:
+            automated downloads, geospatial analysis, time-series
+            generation, quality assurance and publication-quality
+            visualisations, together with the full documentation of
+            the test model and the findings register.
+          </p>
+
+          <p>
+            All figures and statistics shown on this page are generated
+            automatically from the latest available NSIDC dataset and
+            updated daily.
+          </p>
 
         </section>
 
         <section>
 
-        <p>
-
-        <a href="../index.html">
-
-        ← Back to portfolio
-
-        </a>
-
-        </p>
+          <p>
+            <a href="../index.html">← Back to portfolio</a>
+            &nbsp;•&nbsp;
+            <a href="sea-ice-testing.html">Testing &amp; QA →</a>
+          </p>
 
         </section>
 
@@ -373,9 +438,7 @@
       <footer>
 
         <p>
-
           © <span id="year"></span> Christian Lurz
-
         </p>
 
       </footer>
@@ -383,16 +446,15 @@
     </div>
 
     <script>
-
     document.getElementById("year").textContent =
     new Date().getFullYear();
+    </script>
 
+    <script>
     fetch(
-    "https://raw.githubusercontent.com/Chris010980/hudson_bay_sea_ice_showcase/master/output/analysis/latest.json"
+    "https://raw.githubusercontent.com/Chris010980/hudson_bay_sea_ice_showcase/stable/output/analysis/latest.json"
     )
-
     .then(response => response.json())
-
     .then(data => {
 
         const hudsonBay = data.regions.find(
@@ -446,19 +508,18 @@
         document.getElementById("datasetDate").textContent =
             hudsonBay.date;
 
+        document.getElementById("observations").textContent =
+            data.observations.toLocaleString();
+
         document.getElementById("dataset").textContent =
             data.dataset;
 
         document.getElementById("generated").textContent =
             new Date(data.generated).toLocaleString();
 
-        document.getElementById("observations").textContent =
-            data.observations.toLocaleString();
-
     })
 
     .catch(console.error);
-
     </script>
 
     <div id="lightbox" class="lightbox" aria-hidden="true">
